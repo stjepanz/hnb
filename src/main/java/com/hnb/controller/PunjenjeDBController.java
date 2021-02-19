@@ -19,20 +19,7 @@ public class PunjenjeDBController {
     HNBtoDB service;
 
     @GetMapping("/punjenje")
-    public List<Tecajevi> getAllTecajevi() {
-        List<Tecajevi> allTecajevi = Arrays.asList(service.getAllTecajevi());
-        return allTecajevi;
-    }
-
-//    @GetMapping("/punjenje/{valuta}")
-//    public Flux<Tecajevi> getPostById(@PathVariable("valuta") String valuta) {
-//        Flux<Tecajevi> tecaj = service.getTecaj(valuta);
-//        return tecaj;
-//    }
-
-    @GetMapping("/punjenje/{valuta}")
-    public Tecajevi getPostById(@PathVariable("valuta") String valuta) {
-        Tecajevi tecaj = service.getTecaj(valuta);
-        return tecaj;
+    public void getAllTecajevi() {
+        service.getAllTecajevi();
     }
 }

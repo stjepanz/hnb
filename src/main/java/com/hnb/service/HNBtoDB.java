@@ -13,54 +13,25 @@ import java.util.List;
 
 @Service
 public class HNBtoDB {
-    private WebClient webClient = WebClient.create("http://api.hnb.hr/tecajn");
 
+    @Autowired
     HNBcrudRepository repository;
 
     @Autowired
     private WebClient.Builder webClientBuilder;
 
-    public Tecajevi[] getAllTecajevi() {
-        final String POST_API = "http://api.hnb.hr/tecajn/v2";
+    public void getAllTecajevi() {
         Tecajevi[] sviTecajevi = webClientBuilder.build()
                 .get()
-                .uri(POST_API)
-                .retrieve()
-                .bodyToMono(Tecajevi[].class)
-                .block();
-        return sviTecajevi;
-    }
-
-//    public Flux<Tecajevi> getTecaj(String valuta){
-//        Flux<Tecajevi> a = webClient.get()
-//                .uri("/v2?valuta="+valuta)
-//                .retrieve()
-//                .bodyToFlux(Tecajevi.class);
-//
-//
-//        return a;
-//    }
-
-
-
-
-
-
-public Tecajevi getTecaj(String valuta){
-
-        Tecajevi[] tecajLista = webClientBuilder.build()
-                .get()
-                .uri("http://api.hnb.hr/tecajn/v2?valuta="+valuta, valuta)
+                .uri("http://api.hnb.hr/tecajn/v2?datum-od=1994-05-30&datum-do=2021-02-19")
                 .retrieve()
                 .bodyToMono(Tecajevi[].class)
                 .block();
 
-        Tecajevi a = tecajLista[0];
-        Tecajevi b = new Tecajevi(a.getBroj_tecajnice(), a.getDatum_primjene(), a.getDrzava(), a.getDrzava_iso(), a.getSifra_valute(), a.getValuta(), a.getJedinica(), a.getKupovni_tecaj(), a.getSrednji_tecaj(), a.getProdajni_tecaj());
-        System.out.println(a);
-        System.out.println(a.toString());
-        System.out.println(b);
-//        repository.save(new Tecajevi(a.getBroj_tecajnice(), a.getDatum_primjene(), a.getDrzava(), a.getDrzava_iso(), a.getSifra_valute(), a.getValuta(), a.getJedinica(), a.getKupovni_tecaj(), a.getSrednji_tecaj(), a.getProdajni_tecaj()));
-        return a;
+        for (int i=0; i<sviTecajevi.length; i++){
+            Tecajevi var = sviTecajevi[i];
+            repository.save(var);
+        }
+        System.out.println("Gotovo");
     }
 }
