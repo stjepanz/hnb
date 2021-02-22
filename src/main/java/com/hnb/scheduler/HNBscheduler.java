@@ -1,7 +1,7 @@
 package com.hnb.scheduler;
 
 import com.hnb.query.Queries;
-import com.hnb.service.HNBtoDB;
+import com.hnb.service.HNBservice;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.scheduling.annotation.EnableScheduling;
@@ -12,16 +12,18 @@ import java.time.LocalDate;
 
 @Configuration
 @EnableScheduling
-public class Scheduler {
+public class HNBscheduler {
+
 
     @Autowired
-    HNBtoDB service;
+    HNBservice service;
 
     private final Queries queries;
 
-    public Scheduler(Queries queries) {
+    public HNBscheduler(Queries queries) {
         this.queries = queries;
     }
+
 
     @Scheduled(fixedRate = 3600000)
     public void scheduleFixedRateTask() throws ParseException {

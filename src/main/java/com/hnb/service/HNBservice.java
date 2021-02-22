@@ -10,7 +10,7 @@ import java.text.ParseException;
 import java.time.LocalDate;
 
 @Service
-public class HNBtoDB {
+public class HNBservice {
 
     @Autowired
     HNBcrudRepository repository;
