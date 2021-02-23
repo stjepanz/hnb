@@ -4,7 +4,6 @@ import com.hnb.models.Tecajevi;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.CrudRepository;
 
-import java.sql.Date;
 import java.time.LocalDate;
 import java.util.List;
 

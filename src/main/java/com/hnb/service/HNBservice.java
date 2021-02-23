@@ -68,13 +68,11 @@ public class HNBservice {
     }
 
     public double prosjecnaSrednjaVrijednost(List<String> lista){
-        double prosijek =0;
-
-        System.out.println(lista);
-
-
-
-
-        return prosijek;
+        double prosjek = 0;
+        for (int i = 0; i< lista.size(); i++){
+            prosjek+=Double.parseDouble(lista.get(i).replace(",", "."));
+        }
+        prosjek=prosjek/lista.size();
+        return prosjek;
     }
 }
