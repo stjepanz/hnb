@@ -8,6 +8,7 @@ import org.springframework.web.reactive.function.client.WebClient;
 
 import java.text.ParseException;
 import java.time.LocalDate;
+import java.util.List;
 
 @Service
 public class HNBservice {
@@ -64,6 +65,16 @@ public class HNBservice {
                 zadnji = true;
             }
         }
-        System.out.println("Gotovo");
+    }
+
+    public double prosjecnaSrednjaVrijednost(List<String> lista){
+        double prosijek =0;
+
+        System.out.println(lista);
+
+
+
+
+        return prosijek;
     }
 }

@@ -36,11 +36,13 @@ public class HNBscheduler {
             else{
                 System.out.println("Updateanje");
                 service.upadateajBazu(LocalDate.parse(queries.getLastDate()));
+                System.out.println("Updateano");
             }
         }
         catch (Exception e){
             System.out.println("Punjenje");
             service.napuniBazu();
+            System.out.println("Napunjeno");
         }
     }
 }
