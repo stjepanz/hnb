@@ -29,5 +29,6 @@ public class HNBcontroller {
 
         double prosjek =service.prosjecnaSrednjaVrijednost(queries.getProsjecniTecajeviRaspon(valuta, LocalDate.parse(start).minusDays(1), LocalDate.parse(end)));
         return prosjek;
+        
     }
 }
