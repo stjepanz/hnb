@@ -28,7 +28,6 @@ public class HNBcontroller {
     public double getSrednjiTecaj(@PathVariable("valuta") String valuta, @PathVariable("start") String start, @PathVariable("end") String end){
 
         double prosjek =service.prosjecnaSrednjaVrijednost(queries.getProsjecniTecajeviRaspon(valuta, LocalDate.parse(start).minusDays(1), LocalDate.parse(end)));
-
         return prosjek;
     }
 }
