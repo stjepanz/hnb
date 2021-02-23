@@ -2,6 +2,8 @@ package com.hnb.scheduler;
 
 import com.hnb.query.Queries;
 import com.hnb.service.HNBservice;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.scheduling.annotation.EnableScheduling;
@@ -13,6 +15,9 @@ import java.time.LocalDate;
 @Configuration
 @EnableScheduling
 public class HNBscheduler {
+
+
+    private final Logger logger = LoggerFactory.getLogger(this.getClass());
 
 
     @Autowired
@@ -31,18 +36,18 @@ public class HNBscheduler {
             LocalDate localDate = LocalDate.now();
 
             if(localDate.equals(LocalDate.parse(queries.getLastDate()))){
-                System.out.println("Sve je updateano");
+                logger.debug("Sve je updateano");
             }
             else{
-                System.out.println("Updateanje");
+                logger.debug("Updateanje");
                 service.upadateajBazu(LocalDate.parse(queries.getLastDate()));
-                System.out.println("Updateano");
+                logger.debug("Updateano");
             }
         }
         catch (Exception e){
-            System.out.println("Punjenje");
+            logger.debug("Punjenje");
             service.napuniBazu();
-            System.out.println("Napunjeno");
+            logger.debug("Napunjeno");
         }
     }
 }
