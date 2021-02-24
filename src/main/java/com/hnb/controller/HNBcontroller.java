@@ -14,7 +14,6 @@ import java.util.List;
 public class HNBcontroller {
 
     double prosjek;
-
     @Autowired
     Queries queries;
 
@@ -29,8 +28,8 @@ public class HNBcontroller {
     @GetMapping("/srednjitecaj/{valuta}/{start}/{end}")
     public double getSrednjiTecaj(@PathVariable("valuta") String valuta, @PathVariable("start") String start, @PathVariable("end") String end){
 
-        prosjek=service.prosjecnaSrednjaVrijednost(queries.getProsjecniTecajeviRaspon(valuta, LocalDate.parse(start).minusDays(1), LocalDate.parse(end)));
-        return prosjek;
+         prosjek=service.prosjecnaSrednjaVrijednost(queries.getProsjecniTecajeviRaspon(valuta, LocalDate.parse(start).minusDays(1), LocalDate.parse(end)));
 
+        return prosjek;
     }
 }

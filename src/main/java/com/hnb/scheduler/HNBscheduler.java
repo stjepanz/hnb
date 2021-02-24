@@ -16,9 +16,7 @@ import java.time.LocalDate;
 @EnableScheduling
 public class HNBscheduler {
 
-
-    private final Logger logger = LoggerFactory.getLogger(this.getClass());
-
+    private Logger logger= LoggerFactory.getLogger(this.getClass());
 
     @Autowired
     HNBservice service;
@@ -39,13 +37,11 @@ public class HNBscheduler {
                 logger.debug("Sve je updateano");
             }
             else{
-                logger.debug("Updateanje");
                 service.upadateajBazu(LocalDate.parse(queries.getLastDate()));
                 logger.debug("Updateano");
             }
         }
         catch (Exception e){
-            logger.debug("Punjenje");
             service.napuniBazu();
             logger.debug("Napunjeno");
         }
