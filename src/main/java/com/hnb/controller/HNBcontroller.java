@@ -14,6 +14,8 @@ import java.util.List;
 public class HNBcontroller {
 
     double prosjek;
+
+
     @Autowired
     Queries queries;
 
