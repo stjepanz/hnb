@@ -11,6 +11,7 @@ import org.springframework.scheduling.annotation.Scheduled;
 
 import java.text.ParseException;
 import java.time.LocalDate;
+import java.time.LocalTime;
 
 @Configuration
 @EnableScheduling
@@ -30,20 +31,20 @@ public class HNBscheduler {
 
     @Scheduled(fixedRate = 3600000)
     public void scheduleFixedRateTask() throws ParseException {
-        try {
-            LocalDate localDate = LocalDate.now();
+        LocalDate localDate = LocalDate.now();
+        LocalDate lastDate =  queries.getLastDate();
 
-            if(localDate.equals(LocalDate.parse(queries.getLastDate()))){
-                logger.debug("Sve je updateano");
-            }
-            else{
-                service.upadateajBazu(LocalDate.parse(queries.getLastDate()));
-                logger.debug("Updateano");
-            }
+        if(localDate.equals(lastDate)){
+            logger.debug("Provjera - sve je updateano");
         }
-        catch (Exception e){
+        else if(lastDate==null){
             service.napuniBazu();
-            logger.debug("Napunjeno");
+            System.out.println("Baza je napunjena od nule");
+
+        }
+        else {
+            service.upadateajBazu(lastDate);
+            System.out.println("Updateanje baze");
         }
     }
 }

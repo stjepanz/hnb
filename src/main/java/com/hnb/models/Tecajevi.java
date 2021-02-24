@@ -1,6 +1,7 @@
 package com.hnb.models;
 
 import javax.persistence.*;
+import java.time.LocalDate;
 
 @Entity
 @Table(name = "tecajevi")
@@ -10,7 +11,7 @@ public class Tecajevi{
     private String broj_tecajnice;
 
     @Column(name = "datum_primjene")
-    private String datum_primjene;
+    private LocalDate datum_primjene;
 
     @Column(name = "drzava")
     private String drzava;
@@ -44,7 +45,7 @@ public class Tecajevi{
     public Tecajevi() {
     }
 
-    public Tecajevi(String broj_tecajnice, String datum_primjene, String drzava, String drzava_iso, String sifra_valute, String valuta, int jedinica, String kupovni_tecaj, String srednji_tecaj, String prodajni_tecaj) {
+    public Tecajevi(String broj_tecajnice, LocalDate datum_primjene, String drzava, String drzava_iso, String sifra_valute, String valuta, int jedinica, String kupovni_tecaj, String srednji_tecaj, String prodajni_tecaj) {
         this.broj_tecajnice = broj_tecajnice;
         this.datum_primjene = datum_primjene;
         this.drzava = drzava;
@@ -57,8 +58,6 @@ public class Tecajevi{
         this.prodajni_tecaj = prodajni_tecaj;
     }
 
-
-
     public String getBroj_tecajnice() {
         return broj_tecajnice;
     }
@@ -67,11 +66,11 @@ public class Tecajevi{
         this.broj_tecajnice = broj_tecajnice;
     }
 
-    public String getDatum_primjene() {
+    public LocalDate getDatum_primjene() {
         return datum_primjene;
     }
 
-    public void setDatum_primjene(String datum_primjene) {
+    public void setDatum_primjene(LocalDate datum_primjene) {
         this.datum_primjene = datum_primjene;
     }
 
