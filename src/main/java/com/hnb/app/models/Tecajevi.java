@@ -1,4 +1,4 @@
-package com.hnb.models;
+package com.hnb.app.models;
 
 import javax.persistence.*;
 import java.time.LocalDate;
@@ -161,5 +161,5 @@ public class Tecajevi{
     public Long getId() {
         return id;
     }
-    
+
 }

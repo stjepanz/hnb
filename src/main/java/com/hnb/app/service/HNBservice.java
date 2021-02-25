@@ -1,8 +1,8 @@
-package com.hnb.service;
+package com.hnb.app.service;
 
-import com.hnb.models.Tecajevi;
-import com.hnb.query.Queries;
-import com.hnb.repository.HNBcrudRepository;
+import com.hnb.app.models.Tecajevi;
+import com.hnb.app.query.Queries;
+import com.hnb.app.repository.HNBcrudRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.web.reactive.function.client.WebClient;
@@ -27,10 +27,10 @@ public class HNBservice {
         LocalDate danas = LocalDate.now();
         boolean zadnji = false;
         while (!zadnji) {
-            if (!pocetak.isEqual(danas.plusDays(1))) {
+            if (!pocetak.isEqual(danas)) {
                 Tecajevi[] sviTecajevi = webClientBuilder.build()
                         .get()
-                        .uri("http://api.hnb.hr/tecajn/v2?datum-primjene=" + pocetak.toString())
+                        .uri("http://api.hnb.hr/tecajn/v2?datum-primjene=" + pocetak.plusDays(1).toString())
                         .retrieve()
                         .bodyToMono(Tecajevi[].class)
                         .block();

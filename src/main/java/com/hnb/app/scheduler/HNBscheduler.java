@@ -1,7 +1,7 @@
-package com.hnb.scheduler;
+package com.hnb.app.scheduler;
 
-import com.hnb.query.Queries;
-import com.hnb.service.HNBservice;
+import com.hnb.app.service.HNBservice;
+import com.hnb.app.query.Queries;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;

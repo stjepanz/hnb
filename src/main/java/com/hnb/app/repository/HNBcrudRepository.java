@@ -1,6 +1,6 @@
-package com.hnb.repository;
+package com.hnb.app.repository;
 
-import com.hnb.models.Tecajevi;
+import com.hnb.app.models.Tecajevi;
 import org.springframework.data.repository.CrudRepository;
 import org.springframework.stereotype.Repository;
 

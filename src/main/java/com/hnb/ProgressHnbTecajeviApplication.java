@@ -1,7 +1,5 @@
 package com.hnb;
 
-import com.hnb.query.Queries;
-import com.hnb.repository.HNBcrudRepository;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.Bean;

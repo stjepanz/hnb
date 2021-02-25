@@ -1,11 +1,10 @@
-package com.hnb.query;
+package com.hnb.app.query;
 
-import com.hnb.models.Tecajevi;
+import com.hnb.app.models.Tecajevi;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.CrudRepository;
 
 import java.time.LocalDate;
-import java.sql.Date;
 import java.util.List;
 
 public interface Queries extends CrudRepository<Tecajevi, Long> {
