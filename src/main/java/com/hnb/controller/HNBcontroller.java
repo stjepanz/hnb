@@ -15,7 +15,6 @@ public class HNBcontroller {
 
     double prosjek;
 
-
     @Autowired
     Queries queries;
 
@@ -42,6 +41,4 @@ public class HNBcontroller {
     public void popunjavanjePraznina(){
         service.popunjavanjePraznina();
     }
-
-
 }
