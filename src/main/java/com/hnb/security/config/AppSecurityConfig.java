@@ -42,7 +42,7 @@ public class AppSecurityConfig extends WebSecurityConfigurerAdapter {
 
     @Override
     protected void configure(HttpSecurity http) throws Exception {
-        
+
 
         http.authorizeRequests()
                 .antMatchers("/authenticate").permitAll()
@@ -51,7 +51,7 @@ public class AppSecurityConfig extends WebSecurityConfigurerAdapter {
                 .antMatchers(HttpMethod.GET, "/praznine/provjera").hasAnyAuthority("MANAGER", "ADMIN")
                 .antMatchers(HttpMethod.GET, "/praznine/popunjavanje").hasAnyAuthority("MANAGER", "ADMIN")
                 .antMatchers(HttpMethod.DELETE, "/users/**").hasAuthority("ADMIN")
-                .antMatchers(HttpMethod.POST, "/users").hasAnyAuthority("ADMIN")
+                .antMatchers(HttpMethod.POST, "/users/").hasAnyAuthority("ADMIN")
                 .antMatchers(HttpMethod.PUT, "/users/**").hasAnyAuthority("ADMIN")
                 .antMatchers(HttpMethod.GET, "/users/**").hasAnyAuthority("ADMIN")
                 .antMatchers(HttpMethod.GET, "/users").hasAnyAuthority("ADMIN")
