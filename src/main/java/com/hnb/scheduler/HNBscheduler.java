@@ -11,7 +11,6 @@ import org.springframework.scheduling.annotation.Scheduled;
 
 import java.text.ParseException;
 import java.time.LocalDate;
-import java.time.LocalTime;
 
 @Configuration
 @EnableScheduling
