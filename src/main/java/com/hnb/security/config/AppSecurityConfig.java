@@ -52,6 +52,7 @@ public class AppSecurityConfig extends WebSecurityConfigurerAdapter {
                 .antMatchers(HttpMethod.GET, "/praznine/popunjavanje").hasAnyAuthority("MANAGER", "ADMIN")
                 .antMatchers(HttpMethod.DELETE, "/users/**").hasAuthority("ADMIN")
                 .antMatchers(HttpMethod.POST, "/users/").hasAnyAuthority("ADMIN")
+                .antMatchers(HttpMethod.POST, "/users").hasAnyAuthority("ADMIN")
                 .antMatchers(HttpMethod.PUT, "/users/**").hasAnyAuthority("ADMIN")
                 .antMatchers(HttpMethod.GET, "/users/**").hasAnyAuthority("ADMIN")
                 .antMatchers(HttpMethod.GET, "/users").hasAnyAuthority("ADMIN")
