@@ -56,6 +56,7 @@ public class AppSecurityConfig extends WebSecurityConfigurerAdapter {
                 .antMatchers(HttpMethod.PUT, "/users/**").hasAnyAuthority("ADMIN")
                 .antMatchers(HttpMethod.GET, "/users/**").hasAnyAuthority("ADMIN")
                 .antMatchers(HttpMethod.GET, "/users").hasAnyAuthority("ADMIN")
+                .antMatchers(HttpMethod.GET, "/download/**/**/**").hasAnyAuthority("ADMIN")
                 .and()
                 .httpBasic()
                 .and()
