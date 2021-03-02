@@ -3,11 +3,18 @@ package com.hnb.app.service;
 import com.hnb.app.models.Tecajevi;
 import com.hnb.app.query.Queries;
 import com.hnb.app.repository.HNBcrudRepository;
+import org.apache.poi.ss.usermodel.*;
+import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.web.reactive.function.client.WebClient;
+import reactor.core.publisher.Flux;
 
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.IOException;
 import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.List;
 
 @Service
@@ -125,4 +132,7 @@ public class HNBservice {
         prosjek = prosjek / lista.size();
         return prosjek;
     }
+
+
+
 }

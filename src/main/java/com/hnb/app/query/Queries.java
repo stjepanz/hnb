@@ -20,4 +20,38 @@ public interface Queries extends CrudRepository<Tecajevi, Long> {
 
     @Query(value = "select datum_primjene from tecajevi where datum_primjene = ?1 limit 1", nativeQuery = true)
     LocalDate provjeriDatum(LocalDate datum);
+
+
+
+
+
+    @Query(value = "select broj_tecajnice from tecajevi where valuta = ?1 and datum_primjene between ?2 and ?3 order by datum_primjene asc", nativeQuery = true)
+    List<String> getBrojTecajniceRaspon(String valuta, LocalDate datumOd, LocalDate datumDo);
+
+    @Query(value = "select datum_primjene from tecajevi where valuta = ?1 and datum_primjene between ?2 and ?3 order by datum_primjene asc", nativeQuery = true)
+    List<String> getDatumPrimjeneRaspon(String valuta, LocalDate datumOd, LocalDate datumDo);
+
+    @Query(value = "select drzava from tecajevi where valuta = ?1 and datum_primjene between ?2 and ?3 order by datum_primjene asc", nativeQuery = true)
+    List<String> getDrzavaRaspon(String valuta, LocalDate datumOd, LocalDate datumDo);
+
+    @Query(value = "select drzava_iso from tecajevi where valuta = ?1 and datum_primjene between ?2 and ?3 order by datum_primjene asc", nativeQuery = true)
+    List<String> getDrzavaISORaspon(String valuta, LocalDate datumOd, LocalDate datumDo);
+
+    @Query(value = "select sifra_valute from tecajevi where valuta = ?1 and datum_primjene between ?2 and ?3 order by datum_primjene asc", nativeQuery = true)
+    List<String> getSifraValuteRaspon(String valuta, LocalDate datumOd, LocalDate datumDo);
+
+    @Query(value = "select jedinica from tecajevi where valuta = ?1 and datum_primjene between ?2 and ?3 order by datum_primjene asc", nativeQuery = true)
+    List<String> getJedinicaRaspon(String valuta, LocalDate datumOd, LocalDate datumDo);
+
+    @Query(value = "select kupovni_tecaj from tecajevi where valuta = ?1 and datum_primjene between ?2 and ?3 order by datum_primjene asc", nativeQuery = true)
+    List<String> getKupovniTecajRaspon(String valuta, LocalDate datumOd, LocalDate datumDo);
+
+    @Query(value = "select srednji_tecaj from tecajevi where valuta = ?1 and datum_primjene between ?2 and ?3 order by datum_primjene asc", nativeQuery = true)
+    List<String> getSrednjiTecajRaspon(String valuta, LocalDate datumOd, LocalDate datumDo);
+
+    @Query(value = "select prodajni_tecaj from tecajevi where valuta = ?1 and datum_primjene between ?2 and ?3 order by datum_primjene asc", nativeQuery = true)
+    List<String> getProdajniTecajRaspon(String valuta, LocalDate datumOd, LocalDate datumDo);
+
+    @Query(value = "select id from tecajevi where valuta = ?1 and datum_primjene between ?2 and ?3 order by datum_primjene asc", nativeQuery = true)
+    List<String> getIdRaspon(String valuta, LocalDate datumOd, LocalDate datumDo);
 }
