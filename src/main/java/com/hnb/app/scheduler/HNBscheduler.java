@@ -34,16 +34,16 @@ public class HNBscheduler {
         LocalDate lastDate =  queries.getLastDate();
 
         if(localDate.equals(lastDate)){
-            logger.debug("Provjera - sve je updateano");
+            logger.debug("Provjera - sve je updateano (scheduler)");
         }
         else if(lastDate==null){
             service.napuniBazu();
-            System.out.println("Baza je napunjena od nule");
+            logger.debug("Baza je napunjena od nule (scheduler)");
 
         }
         else {
             service.upadateajBazu(lastDate);
-            System.out.println("Updateanje baze");
+            logger.debug("Baza je updateana sa podacima koji su nedostajali (scheduler)");
         }
     }
 }

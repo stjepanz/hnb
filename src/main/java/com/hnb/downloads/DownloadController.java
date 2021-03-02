@@ -9,6 +9,8 @@ import com.hnb.app.models.Tecajevi;
 import com.hnb.app.query.Queries;
 import com.hnb.app.repository.HNBcrudRepository;
 import org.apache.tomcat.jni.Local;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.InputStreamResource;
 import org.springframework.http.HttpHeaders;
@@ -26,6 +28,8 @@ import java.util.List;
 
 @RestController
 public class DownloadController {
+
+    private final Logger logger = LoggerFactory.getLogger(this.getClass());
 
     @Autowired
     HNBcrudRepository customerRepository;
@@ -46,6 +50,8 @@ public class DownloadController {
 
         HttpHeaders headers = new HttpHeaders();
         headers.add("Content-Disposition", "attachment; filename=tecajevi.xlsx");
+
+        logger.debug("Downloadanje xlsx file-a koji sadrzi podatke o valuti "+valuta+" od "+start+" do "+end);
 
         return ResponseEntity
                 .ok()

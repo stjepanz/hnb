@@ -21,6 +21,7 @@ public class AdminService {
     public List<Users> getAllUsers() {
         try {
             List<Users> userList = (List<Users>) repository.findAll();
+            logger.debug("Dohvacanje liste svih usera i njihovih passworda i ovlasti");
             return userList;
         }
         catch (Exception e){
@@ -32,10 +33,11 @@ public class AdminService {
     public Users getUsersById (int id){
         try {
             Optional<Users> user = repository.findById(id);
+            logger.debug("Dohvacanje usera, njegovog passworda i ovlasti preko id-a");
             return user.get();
         }
         catch (Exception e){
-            logger.debug("Usera koji ima id: " + id +" ne postoji");
+            logger.debug("Pokusaj dohvacanja usera koji ima id: " + id +", ali on ne postoji");
             return null;
         }
     }
@@ -43,6 +45,7 @@ public class AdminService {
     public void createUser(Users user) {
         if (user.getUsername()!=null && user.getPassword()!= null && user.getRoles()!=null){
             repository.save(user);
+            logger.debug("Novi korisnik je dodan u bazu");
         }
 
     }
@@ -55,6 +58,7 @@ public class AdminService {
         if (user.getRoles()==null){newUser.setRoles(odlUser.get().getRoles());}
         newUser.setId(id);
         repository.save(newUser);
+        logger.debug("User sa id-em "+id+" je updatean");
     }
 
 
@@ -62,6 +66,7 @@ public class AdminService {
         try {
             Optional<Users> user = repository.findById(id);
             repository.deleteById(id);
+            logger.debug("User sa id-em "+id+" je obrisan");
         }
         catch (Exception e){
             logger.debug("User koji ima id: " + id +" ne postoji");
