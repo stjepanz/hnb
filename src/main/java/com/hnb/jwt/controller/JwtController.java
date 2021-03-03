@@ -1,5 +1,6 @@
 package com.hnb.jwt.controller;
 
+import com.hnb.app.service.LoggerService;
 import com.hnb.jwt.models.AuthenticationRequest;
 import com.hnb.jwt.models.AuthenticationResponse;
 import com.hnb.jwt.util.JwtUtil;

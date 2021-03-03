@@ -4,11 +4,13 @@ import com.hnb.app.models.Tecajevi;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.CrudRepository;
 
+import java.sql.Timestamp;
 import java.time.LocalDate;
 import java.util.List;
 
 public interface Queries extends CrudRepository<Tecajevi, Long> {
 
+//    HNB tecajevi
     @Query(value = "select datum_primjene from tecajevi order by datum_primjene desc limit 1", nativeQuery = true)
     LocalDate getLastDate();
 
@@ -22,9 +24,7 @@ public interface Queries extends CrudRepository<Tecajevi, Long> {
     LocalDate provjeriDatum(LocalDate datum);
 
 
-
-
-
+//    Excel
     @Query(value = "select broj_tecajnice from tecajevi where valuta = ?1 and datum_primjene between ?2 and ?3 order by datum_primjene asc", nativeQuery = true)
     List<String> getBrojTecajniceRaspon(String valuta, LocalDate datumOd, LocalDate datumDo);
 
@@ -54,4 +54,15 @@ public interface Queries extends CrudRepository<Tecajevi, Long> {
 
     @Query(value = "select id from tecajevi where valuta = ?1 and datum_primjene between ?2 and ?3 order by datum_primjene asc", nativeQuery = true)
     List<String> getIdRaspon(String valuta, LocalDate datumOd, LocalDate datumDo);
+
+
+//    Logger
+    @Query(value = "select * from logovi where vrijeme between ?1 and ?2", nativeQuery = true)
+    List<String> getLogoviPoDatumu(LocalDate datumOd, LocalDate datumDo);
+
+    @Query(value = "select vrijeme from logovi order by vrijeme asc limit 1", nativeQuery = true)
+    Timestamp getPrviDatumLogger();
+    @Query(value = "select vrijeme from logovi order by vrijeme desc limit 1", nativeQuery = true)
+    Timestamp getZadnjiDatumLogger();
+
 }
