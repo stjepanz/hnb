@@ -44,7 +44,6 @@ public class DownloadService {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Datum pocetka koji se upisali je iza datuma kraja");
         }
 
-
         if (svevalute.contains(valuta)){
 
             List<Tecajevi> tecajeviOdDo= new ArrayList<>();
