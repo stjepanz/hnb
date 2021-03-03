@@ -48,7 +48,7 @@ public class DownloadController {
     @GetMapping(value = "/download/{valuta}/{start}/{end}")
     public ResponseEntity<InputStreamResource> excelCustomersReport(@CurrentSecurityContext(expression="authentication?.name")
                                                                                 String loggedUser, @PathVariable("valuta") String valuta, @PathVariable("start") String start, @PathVariable("end") String end) throws IOException {
-        List<Tecajevi> tecajevi = service.listaZaExcel(valuta, LocalDate.parse(start), LocalDate.parse(end));
+        List<Tecajevi> tecajevi = service.listaZaExcel(valuta, start, end);
         ByteArrayInputStream in = ExcelGenerator.tecajeviToExcel(tecajevi);
         // return IOUtils.toByteArray(in);
         HttpHeaders headers = new HttpHeaders();
