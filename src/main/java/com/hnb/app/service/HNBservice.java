@@ -133,11 +133,17 @@ public class HNBservice {
         }catch (Exception e){
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Datum kraja koji ste unijeli nije ispravan", e);
         }
-
+        if (start.isBefore(LocalDate.parse("1994-05-30")))
+        {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Prvi datum u bazi je 30.05.1994");
+        }
+        if (end.isAfter(LocalDate.now()))
+        {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Odabrali ste datum koji jos nije dosao");
+        }
         if (start.isAfter(end)){
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Datum pocetka koji se upisali je iza datuma kraja");
         }
-
         if (svevalute.contains(valuta)){
             double prosjek = 0;
             List<String> lista=queries.getProsjecniTecajeviRaspon(valuta, start, end);
