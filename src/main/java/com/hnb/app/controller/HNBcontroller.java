@@ -65,9 +65,4 @@ public class HNBcontroller {
     public List<String> logoviOdDo(@PathVariable("od") String start, @PathVariable("do") String end){
         return loggerService.getLogovi(start, end);
     }
-
-    @GetMapping("/proba")
-    public LocalDate proba(){
-        return LocalDate.parse(queries.getPrviDatumLogger().toString().substring(0,10));
-    }
 }
