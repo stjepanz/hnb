@@ -2,6 +2,7 @@ package com.hnb.app.controller;
 
 import com.hnb.app.service.HNBservice;
 import com.hnb.app.query.Queries;
+import org.apache.tomcat.jni.Local;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -29,14 +30,13 @@ public class HNBcontroller {
     @GetMapping("/valute")
     public List<String> getValute(){
         logger.debug("Dohvacanje svih valuta");
-        return queries.getValute();
+        return service.getValute();
     }
 
     @GetMapping("/srednjitecaj/{valuta}/{start}/{end}")
     public double getSrednjiTecaj(@PathVariable("valuta") String valuta, @PathVariable("start") String start, @PathVariable("end") String end){
         logger.debug("racunanje srednjeg tecaja za valutu "+valuta+" u periodu od "+start+ " do "+end);
-        prosjek=service.prosjecnaSrednjaVrijednost(queries.getProsjecniTecajeviRaspon(valuta, LocalDate.parse(start).minusDays(1), LocalDate.parse(end)));
-        return prosjek;
+        return service.prosjecnaSrednjaVrijednost(valuta, start, end);
     }
 
     @GetMapping("/praznine/provjera")
@@ -50,6 +50,4 @@ public class HNBcontroller {
         logger.debug("Popunjavanje praznina i balici koja sadzri podatke o tecajevima");
         service.popunjavanjePraznina();
     }
-
-
 }

@@ -5,7 +5,9 @@ import com.hnb.app.repository.AdminRepository;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
+import org.springframework.web.server.ResponseStatusException;
 
 import java.util.List;
 import java.util.Optional;
@@ -25,8 +27,8 @@ public class AdminService {
             return userList;
         }
         catch (Exception e){
-            logger.debug("Baza je prazna");
-            return null;
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Baza sa userima je prazna", e);
+
         }
     }
 
@@ -37,8 +39,8 @@ public class AdminService {
             return user.get();
         }
         catch (Exception e){
-            logger.debug("Pokusaj dohvacanja usera koji ima id: " + id +", ali on ne postoji");
-            return null;
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "User koji ima id: "+ id + "ne postoji u bazi", e);
+
         }
     }
 
@@ -51,14 +53,26 @@ public class AdminService {
     }
 
     public void updateUserById (int id, Users user) {
-        Optional<Users> odlUser = repository.findById(id);
-        Users newUser = new Users(user.getUsername(), user.getPassword(), user.getRoles());
-        if (user.getUsername()==null){newUser.setUsername(odlUser.get().getUsername());}
-        if (user.getPassword()==null){newUser.setPassword(odlUser.get().getPassword());}
-        if (user.getRoles()==null){newUser.setRoles(odlUser.get().getRoles());}
-        newUser.setId(id);
-        repository.save(newUser);
-        logger.debug("User sa id-em "+id+" je updatean");
+        try {
+            Optional<Users> odlUser = repository.findById(id);
+            Users newUser = new Users(user.getUsername(), user.getPassword(), user.getRoles());
+            if (user.getUsername()==null){
+                newUser.setUsername(odlUser.get().getUsername());
+            }
+            if (user.getPassword()==null){
+                newUser.setPassword(odlUser.get().getPassword());
+            }
+            if (user.getRoles()==null){
+                newUser.setRoles(odlUser.get().getRoles());
+            }
+            newUser.setId(id);
+            repository.save(newUser);
+            logger.debug("User sa id-em "+id+" je updatean");
+        }
+        catch (Exception e){
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "User koji ima id: "+ id + "ne postoji u bazi", e);
+
+        }
     }
 
 
@@ -69,7 +83,8 @@ public class AdminService {
             logger.debug("User sa id-em "+id+" je obrisan");
         }
         catch (Exception e){
-            logger.debug("User koji ima id: " + id +" ne postoji");
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "User koji ima id: "+ id + "ne postoji u bazi", e);
+
         }
     }
 }

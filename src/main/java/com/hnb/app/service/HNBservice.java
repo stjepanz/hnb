@@ -3,18 +3,12 @@ package com.hnb.app.service;
 import com.hnb.app.models.Tecajevi;
 import com.hnb.app.query.Queries;
 import com.hnb.app.repository.HNBcrudRepository;
-import org.apache.poi.ss.usermodel.*;
-import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.web.reactive.function.client.WebClient;
-import reactor.core.publisher.Flux;
-
-import java.io.FileNotFoundException;
-import java.io.FileOutputStream;
-import java.io.IOException;
+import org.springframework.web.server.ResponseStatusException;
 import java.time.LocalDate;
-import java.util.ArrayList;
 import java.util.List;
 
 @Service
@@ -124,15 +118,41 @@ public class HNBservice {
         return "Broj dana koji nedostaju: " + brojac;
     }
 
-    public double prosjecnaSrednjaVrijednost(List<String> lista) {
-        double prosjek = 0;
-        for (int i = 0; i < lista.size(); i++) {
-            prosjek += Double.parseDouble(lista.get(i).replace(",", "."));
+    public double prosjecnaSrednjaVrijednost(String valuta, String datumOd, String datumDo) {
+        List<String> svevalute = queries.getValute();
+        valuta=valuta.toUpperCase();
+        LocalDate start;
+        LocalDate end;
+        try {
+            start=LocalDate.parse(datumOd);
+        }catch (Exception e){
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Datum pocetka koji ste unijeli nije ispravan", e);
         }
-        prosjek = prosjek / lista.size();
-        return prosjek;
+        try {
+            end=LocalDate.parse(datumDo);
+        }catch (Exception e){
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Datum kraja koji ste unijeli nije ispravan", e);
+        }
+
+        if (start.isAfter(end)){
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Datum pocetka koji se upisali je iza datuma kraja");
+        }
+
+        if (svevalute.contains(valuta)){
+            double prosjek = 0;
+            List<String> lista=queries.getProsjecniTecajeviRaspon(valuta, start, end);
+            for (int i = 0; i < lista.size(); i++) {
+                prosjek += Double.parseDouble(lista.get(i).replace(",", "."));
+            }
+            prosjek = prosjek / lista.size();
+            return prosjek;
+        }
+        else{
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Valuta "+valuta+" ne postoji");
+        }
     }
 
-
-
+    public List<String> getValute(){
+        return queries.getValute();
+        }
 }
