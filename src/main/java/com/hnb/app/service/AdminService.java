@@ -9,6 +9,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
 
+import java.time.LocalDate;
 import java.util.List;
 import java.util.Optional;
 
@@ -48,6 +49,9 @@ public class AdminService {
         if (user.getUsername()!=null && user.getPassword()!= null && user.getRoles()!=null){
             repository.save(user);
             logger.debug("Novi korisnik je dodan u bazu");
+        }
+        else{
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Unesite sve podatke potrebne za kreiranje usera");
         }
 
     }
