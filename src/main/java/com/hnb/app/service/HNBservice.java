@@ -130,6 +130,7 @@ public class HNBservice {
         loggerService.spremiLog("Provjeravanje praznina u tablici koja sadrzi podatke o tecajevima", "/praznine/provjera", loggedUser, response.getStatus());
         return "Broj dana koji nedostaju: " + brojac;
     }
+    
 
     public double prosjecnaSrednjaVrijednost(String valuta,
                                              String datumOd,
