@@ -31,7 +31,6 @@ public class Logger {
     @Column(name = "code")
     private int code;
 
-
     public Logger() {
     }
 
