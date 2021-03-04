@@ -2,11 +2,15 @@ package com.hnb.downloads;
 
 import com.hnb.app.models.Tecajevi;
 import com.hnb.app.query.Queries;
+import com.hnb.app.service.LoggerService;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
 
+import javax.servlet.http.HttpServletResponse;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
@@ -14,10 +18,20 @@ import java.util.List;
 @Service
 public class DownloadService {
 
+
+    private final Logger logger = LoggerFactory.getLogger(this.getClass());
+
+    @Autowired
+    LoggerService loggerService;
+
     @Autowired
     Queries queries;
 
-    public List<Tecajevi> listaZaExcel(String valuta, String datumOd, String datumDo) {
+    public List<Tecajevi> listaZaExcel(String valuta,
+                                       String datumOd,
+                                       String datumDo,
+                                       String loggedUser,
+                                       HttpServletResponse response) {
         List<String> svevalute = queries.getValute();
         valuta=valuta.toUpperCase();
         LocalDate start;
@@ -25,23 +39,38 @@ public class DownloadService {
         try {
             start=LocalDate.parse(datumOd);
         }catch (Exception e){
-            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Datum pocetka koji ste unijeli nije ispravan", e);
+            response.setStatus(400);
+            logger.debug("Error - Racunanje srednjeg tecaja za valutu "+valuta.toUpperCase()+" u periodu od "+datumOd+ " do "+datumDo+"- Datum pocetka nije ispravan");
+            loggerService.spremiLog("Error - Racunanje srednjeg tecaja za valutu "+valuta.toUpperCase()+" u periodu od "+datumOd+ " do "+datumDo+"- Datum pocetka nije ispravan", "/download/"+valuta+"/"+datumOd+"/"+datumDo, loggedUser, response.getStatus());
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Datum pocetka nije ispravan", e);
         }
         try {
             end=LocalDate.parse(datumDo);
         }catch (Exception e){
-            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Datum kraja koji ste unijeli nije ispravan", e);
+            response.setStatus(400);
+            logger.debug("Error - Racunanje srednjeg tecaja za valutu "+valuta.toUpperCase()+" u periodu od "+datumOd+ " do "+datumDo+"- Datum kraja nije ispravan");
+            loggerService.spremiLog("Error - Racunanje srednjeg tecaja za valutu "+valuta.toUpperCase()+" u periodu od "+datumOd+ " do "+datumDo+"- Datum kraja nije ispravan", "/download/"+valuta+"/"+datumOd+"/"+datumDo, loggedUser, response.getStatus());
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Datum kraja nije ispravan", e);
         }
         if (start.isBefore(LocalDate.parse("1994-05-30")))
         {
+            response.setStatus(400);
+            logger.debug("Error - Racunanje srednjeg tecaja za valutu "+valuta.toUpperCase()+" u periodu od "+datumOd+ " do "+datumDo+"- Prvi datum u bazi je 30.05.1994");
+            loggerService.spremiLog("Error - Racunanje srednjeg tecaja za valutu "+valuta.toUpperCase()+" u periodu od "+datumOd+ " do "+datumDo+"- Prvi datum u bazi je 30.05.1994", "/download/"+valuta+"/"+datumOd+"/"+datumDo, loggedUser, response.getStatus());
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Prvi datum u bazi je 30.05.1994");
         }
         if (end.isAfter(LocalDate.now()))
         {
-            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Odabrali ste datum koji jos nije dosao");
+            response.setStatus(400);
+            logger.debug("Error - Racunanje srednjeg tecaja za valutu "+valuta.toUpperCase()+" u periodu od "+datumOd+ " do "+datumDo+"- Datum jos nije dosao");
+            loggerService.spremiLog("Error - Racunanje srednjeg tecaja za valutu "+valuta.toUpperCase()+" u periodu od "+datumOd+ " do "+datumDo+"- Datum jos nije dosao", "/download/"+valuta+"/"+datumOd+"/"+datumDo, loggedUser, response.getStatus());
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Datum jos nije dosao");
         }
         if (start.isAfter(end)){
-            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Datum pocetka koji se upisali je iza datuma kraja");
+            response.setStatus(400);
+            logger.debug("Error - Racunanje srednjeg tecaja za valutu "+valuta.toUpperCase()+" u periodu od "+datumOd+ " do "+datumDo+"- Datum pocetka je iza datuma kraja");
+            loggerService.spremiLog("Error - Racunanje srednjeg tecaja za valutu "+valuta.toUpperCase()+" u periodu od "+datumOd+ " do "+datumDo+"- Datum pocetka je iza datuma kraja", "/download/"+valuta+"/"+datumOd+"/"+datumDo, loggedUser, response.getStatus());
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Datum pocetka je iza datuma kraja");
         }
 
         if (svevalute.contains(valuta)){
@@ -62,15 +91,16 @@ public class DownloadService {
             for (int i = 0; i < brojTecajnice.size(); i++) {
                 tecajeviOdDo.add(new Tecajevi(brojTecajnice.get(i), LocalDate.parse(datumPrimjene.get(i)), drzava.get(i), drzavaISO.get(i), sifraValute.get(i), valuta, Integer.parseInt(jedinica.get(i)), kupovniTecaj.get(i), srednjiTecaj.get(i), prodajniTecaj.get(i), Long.parseLong(id.get(i))));
             }
+            logger.debug("Downloadanje excell file-a za valutu " +valuta.toUpperCase()+" u periodu od "+start+ " do "+end);
+            loggerService.spremiLog("Downloadanje excell file-a za valutu " +valuta.toUpperCase()+" u periodu od "+start+ " do "+end, "/download/"+valuta+"/"+start+"/"+end, loggedUser, response.getStatus());
             return tecajeviOdDo;
         }
         else{
+            response.setStatus(400);
+            logger.debug("Error - Racunanje srednjeg tecaja za valutu "+valuta.toUpperCase()+" u periodu od "+datumOd+ " do "+datumDo+"- Valuta "+valuta+" ne postoji");
+            loggerService.spremiLog("Error - Racunanje srednjeg tecaja za valutu "+valuta.toUpperCase()+" u periodu od "+datumOd+ " do "+datumDo+"- Valuta "+valuta+" ne postoji", "/download/"+valuta+"/"+datumOd+"/"+datumDo, loggedUser, response.getStatus());
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Valuta "+valuta+" ne postoji");
         }
 
     }
-
-
-
-
 }

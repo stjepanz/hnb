@@ -11,6 +11,11 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RestController;
 
+import javax.servlet.http.HttpServletResponse;
+import java.io.IOException;
+import java.net.HttpURLConnection;
+import java.net.URL;
+import java.net.http.HttpClient;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.List;
@@ -21,48 +26,38 @@ public class HNBcontroller {
     private final Logger logger = LoggerFactory.getLogger(this.getClass());
 
     @Autowired
-    LoggerService loggerService;
-
-    @Autowired
     Queries queries;
 
     @Autowired
     HNBservice service;
 
     @GetMapping("/valute")
-    public List<String> getValute(@CurrentSecurityContext(expression="authentication?.name")
-                                              String loggedUser){
-        logger.debug("Dohvacanje svih valuta");
-        loggerService.spremiLog("Dohvacanje svih valutaD", "/valute", loggedUser);
-        return service.getValute();
+    public List<String> getValute(@CurrentSecurityContext(expression="authentication?.name") String loggedUser,
+                                  HttpServletResponse response){
+        return service.getValute(loggedUser, response);
     }
 
     @GetMapping("/srednjitecaj/{valuta}/{start}/{end}")
-    public double getSrednjiTecaj(@CurrentSecurityContext(expression="authentication?.name")
-                                              String loggedUser, @PathVariable("valuta") String valuta, @PathVariable("start") String start, @PathVariable("end") String end){
-        logger.debug("Racunanje srednjeg tecaja za valutu "+valuta+" u periodu od "+start+ " do "+end);
-        loggerService.spremiLog("Racunanje srednjeg tecaja za valutu "+valuta.toUpperCase()+" u periodu od "+start+ " do "+end, "/srednjitecaj/"+valuta+"/"+start+"/"+end, loggedUser);
-        return service.prosjecnaSrednjaVrijednost(valuta, start, end);
+    public double getSrednjiTecaj(@CurrentSecurityContext(expression="authentication?.name") String loggedUser,
+                                  @PathVariable("valuta") String valuta,
+                                  @PathVariable("start") String start,
+                                  @PathVariable("end") String end,
+                                  HttpServletResponse response){
+        return service.prosjecnaSrednjaVrijednost(valuta, start, end, loggedUser, response);
     }
 
     @GetMapping("/praznine/provjera")
-    public String provjeraPraznina(@CurrentSecurityContext(expression="authentication?.name")
-                                               String loggedUser){
-        logger.debug("Provjera praznina u tablici koja sadrzi podatke o tecajevima");
-        loggerService.spremiLog("Provjera praznina u tablici koja sadrzi podatke o tecajevima", "/praznine/provjera", loggedUser);
-        return service.provjeravanjePraznina();
+    public String provjeraPraznina(@CurrentSecurityContext(expression="authentication?.name") String loggedUser,
+                                   HttpServletResponse response){
+        return service.provjeravanjePraznina(loggedUser, response);
     }
 
     @GetMapping("/praznine/popunjavanje")
-    public void popunjavanjePraznina(@CurrentSecurityContext(expression="authentication?.name")
-                                                 String loggedUser){
-        logger.debug("Popunjavanje praznina u talici koja sadrzi podatke o tecajevima");
-        loggerService.spremiLog("Popunjavanje praznina u talici koja sadrzi podatke o tecajevima", "/praznine/popunjavanje", loggedUser);
-        service.popunjavanjePraznina();
+    public void popunjavanjePraznina(@CurrentSecurityContext(expression="authentication?.name") String loggedUser,
+                                     HttpServletResponse response){
+        service.popunjavanjePraznina(loggedUser, response);
     }
 
-    @GetMapping("/logovi/{od}/{do}")
-    public List<String> logoviOdDo(@PathVariable("od") String start, @PathVariable("do") String end){
-        return loggerService.getLogovi(start, end);
-    }
+
+
 }

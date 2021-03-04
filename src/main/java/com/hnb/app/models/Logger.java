@@ -28,14 +28,19 @@ public class Logger {
     @Column(name = "logged_user")
     private String loggedUser;
 
+    @Column(name = "code")
+    private int code;
+
+
     public Logger() {
     }
 
-    public Logger(String log, LocalDateTime vrijeme, String endpoint, String loggedUser) {
+    public Logger(String log, LocalDateTime vrijeme, String endpoint, String loggedUser, int code) {
         this.log = log;
         this.vrijeme = vrijeme;
         this.endpoint = endpoint;
         this.loggedUser = loggedUser;
+        this.code = code;
     }
 
     public int getId() {
@@ -76,5 +81,13 @@ public class Logger {
 
     public void setLoggedUser(String loggedUser) {
         this.loggedUser = loggedUser;
+    }
+
+    public int getCode() {
+        return code;
+    }
+
+    public void setCode(int code) {
+        this.code = code;
     }
 }

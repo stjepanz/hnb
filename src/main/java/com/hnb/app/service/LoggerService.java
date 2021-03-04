@@ -22,8 +22,11 @@ public class LoggerService {
     @Autowired
     LoggerRepository repository;
 
-    public void spremiLog(String log, String endpoint, String user){
-        Logger logovi = new Logger(log, LocalDateTime.now(), endpoint, user) ;
+    public void spremiLog(String log,
+                          String endpoint,
+                          String user,
+                          int code){
+        Logger logovi = new Logger(log, LocalDateTime.now(), endpoint, user, code) ;
         repository.save(logovi);
     }
 
