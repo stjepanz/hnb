@@ -23,8 +23,6 @@ import java.util.List;
 @RestController
 public class HNBcontroller {
 
-    private final Logger logger = LoggerFactory.getLogger(this.getClass());
-
     @Autowired
     Queries queries;
 
@@ -57,7 +55,4 @@ public class HNBcontroller {
                                      HttpServletResponse response){
         service.popunjavanjePraznina(loggedUser, response);
     }
-
-
-
 }

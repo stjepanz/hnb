@@ -32,8 +32,12 @@ public class LoggerService {
 
     public List<String> getLogovi(String datumOd, String datumDo){
         LocalDate start;
-
         LocalDate end;
+//        if (datumOd.equals("") || datumDo.equals("")){
+//            start= LocalDate.now();
+//            end=LocalDate.now();
+//            return queries.getLogoviPoDatumu(start, end.plusDays(1));
+//        }
         try {
             start = LocalDate.parse(datumOd);
         }catch (Exception e){
@@ -52,6 +56,7 @@ public class LoggerService {
         {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Datum zadnjeg loga je: "+queries.getZadnjiDatumLogger().toString().substring(0,10));
         }
+
         return queries.getLogoviPoDatumu(start, end.plusDays(1));
     }
 }

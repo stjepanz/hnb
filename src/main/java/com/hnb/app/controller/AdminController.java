@@ -17,8 +17,6 @@ import java.util.List;
 @RequestMapping("/users")
 public class AdminController {
 
-    private final Logger logger = LoggerFactory.getLogger(this.getClass());
-
     @Autowired
     AdminService service;
 
