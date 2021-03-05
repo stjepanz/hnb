@@ -20,11 +20,9 @@ public class LoggerController {
     public List<String> logoviOdDo(@PathVariable(value = "od", required = false) String start,
                                    @PathVariable(value = "do", required = false) String end){
         if (start!=null && end!=null){
-            System.out.println("Radi");
             return loggerService.getLogovi(start, end);
         }
         else if(start==null && end==null){
-            System.out.println("Nema nicega");
             return loggerService.getLogovi(LocalDate.now().toString(),LocalDate.now().toString() );
         }
         else{
