@@ -29,4 +29,5 @@ public class LoggerController {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Upišite oba datuma za neki period ili ostavite prazno za sve logove od danas");
         }
     }
+    
 }
