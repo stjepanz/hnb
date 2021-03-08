@@ -68,6 +68,12 @@ public class AdminService {
             logger.debug("Novi korisnik je dodan u bazu");
             loggerService.spremiLog("Unos novog korisnika u bazu", "/users/", loggedUser, response.getStatus());
         }
+        else if(user.getUsername()!=null && user.getPassword()!= null && user.getRoles()==null){
+            Users tempUser = new Users(user.getUsername(), user.getPassword(), "USER");
+            repository.save(tempUser);
+            logger.debug("Novi korisnik je dodan u bazu");
+            loggerService.spremiLog("Unos novog korisnika u bazu", "/users/", loggedUser, response.getStatus());
+        }
         else{
             response.setStatus(400);
             logger.debug("Error - Unos novog korisnika u bazu - Unesite sve podatke potrebne za kreiranje usera");
