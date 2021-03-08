@@ -21,5 +21,4 @@ public class LoggerController {
                               @RequestParam (required = false) String datumDo){
         return loggerService.getLogovi(user, datumOd, datumDo);
     }
-
 }
