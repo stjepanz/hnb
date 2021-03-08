@@ -93,6 +93,16 @@ public class LoggerService {
                     loggerService.spremiLog("Error - Dohvacanje logova - Datum nije ispravan", "/log", loggedUser, response.getStatus());
                     throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Datum koji ste unijeli nije ispravan (format: GGGG-MM-DD)", e);
                 }
+                if (start.isBefore((LocalDate.parse(queries.getPrviDatumLogger().toString().substring(0, 10))))) {
+                    response.setStatus(400);
+                    loggerService.spremiLog("Error - Dohvacanje logova - Uneseni datum je prije datuma prvog loga u bazi", "/log", loggedUser, response.getStatus());
+                    throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Datum prvog loga je: " + queries.getPrviDatumLogger().toString().substring(0, 10));
+                }
+                if (start.isAfter((LocalDate.parse(queries.getZadnjiDatumLogger().toString().substring(0, 10))))) {
+                    response.setStatus(400);
+                    loggerService.spremiLog("Error - Dohvacanje logova - Uneseni datum jos nije dosao", "/log", loggedUser, response.getStatus());
+                    throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Datum zadnjeg loga je: " + queries.getZadnjiDatumLogger().toString().substring(0, 10));
+                }
                 if (user == null) {
                     loggerService.spremiLog("Dohvacanje logova za datum: " + start, "/log", loggedUser, response.getStatus());
                     return queries.getLogoviPoDatumu(start, start.plusDays(1));
@@ -108,6 +118,16 @@ public class LoggerService {
                     response.setStatus(400);
                     loggerService.spremiLog("Error - Dohvacanje logova - Datum nije ispravan", "/log", loggedUser, response.getStatus());
                     throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Datum koji ste unijeli nije ispravan (format: GGGG-MM-DD)", e);
+                }
+                if (start.isBefore((LocalDate.parse(queries.getPrviDatumLogger().toString().substring(0, 10))))) {
+                    response.setStatus(400);
+                    loggerService.spremiLog("Error - Dohvacanje logova - Uneseni datum je prije datuma prvog loga u bazi", "/log", loggedUser, response.getStatus());
+                    throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Datum prvog loga je: " + queries.getPrviDatumLogger().toString().substring(0, 10));
+                }
+                if (start.isAfter((LocalDate.parse(queries.getZadnjiDatumLogger().toString().substring(0, 10))))) {
+                    response.setStatus(400);
+                    loggerService.spremiLog("Error - Dohvacanje logova - Uneseni datum jos nije dosao", "/log", loggedUser, response.getStatus());
+                    throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Datum zadnjeg loga je: " + queries.getZadnjiDatumLogger().toString().substring(0, 10));
                 }
                 if (user == null) {
                     loggerService.spremiLog("Dohvacanje logova za datum: " + start, "/log", loggedUser, response.getStatus());
