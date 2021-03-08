@@ -3,6 +3,7 @@ package com.hnb.app.service;
 import com.hnb.app.models.Logger;
 import com.hnb.app.query.Queries;
 import com.hnb.app.repository.LoggerRepository;
+import org.apache.tomcat.jni.Local;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
@@ -25,38 +26,50 @@ public class LoggerService {
     public void spremiLog(String log,
                           String endpoint,
                           String user,
-                          int code){
-        Logger logovi = new Logger(log, LocalDateTime.now(), endpoint, user, code) ;
+                          int code) {
+        Logger logovi = new Logger(log, LocalDateTime.now(), endpoint, user, code);
         repository.save(logovi);
     }
 
-    public List<String> getLogovi(String datumOd, String datumDo){
+    public List<String> getLogovi(String user,String datumOd,String datumDo) {
         LocalDate start;
         LocalDate end;
-//        if (datumOd.equals("") || datumDo.equals("")){
-//            start= LocalDate.now();
-//            end=LocalDate.now();
-//            return queries.getLogoviPoDatumu(start, end.plusDays(1));
-//        }
-        try {
-            start = LocalDate.parse(datumOd);
-        }catch (Exception e){
-            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Datum pocetka koji ste unijeli nije ispravan", e);
+        if (datumOd == null && datumDo == null) {
+            if (user == null) {
+                return queries.getLogoviPoDatumu(LocalDate.now(), LocalDate.now().plusDays(1));
+            } else {
+                return queries.getLogoviPoDatumuIUseru(LocalDate.now(), LocalDate.now().plusDays(1), user);
+            }
         }
-        try {
-            end= LocalDate.parse(datumDo);
-        }catch (Exception e){
-            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Datum kraja koji ste unijeli nije ispravan", e);
+        else if (datumOd != null && datumDo != null) {
+            try {
+                start = LocalDate.parse(datumOd);
+            }
+            catch (Exception e) {
+                throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Datum pocetka koji ste unijeli nije ispravan", e);
+            }
+            try{
+                end = LocalDate.parse(datumDo);
+            }
+            catch (Exception e) {
+                throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Datum kraja koji ste unijeli nije ispravan", e);
+            }
+            if(start.isBefore((LocalDate.parse(queries.getPrviDatumLogger().toString().substring(0, 10))))) {
+                throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Datum prvog loga je: " + queries.getPrviDatumLogger().toString().substring(0, 10));
+            }
+            if(end.isAfter((LocalDate.parse(queries.getZadnjiDatumLogger().toString().substring(0, 10))))) {
+                throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Datum zadnjeg loga je: " + queries.getZadnjiDatumLogger().toString().substring(0, 10));
+            }
+            if(user == null) {
+                return queries.getLogoviPoDatumu(start, end.plusDays(1));
+            }
+            else{
+                return queries.getLogoviPoDatumuIUseru(start, end.plusDays(1), user);
+            }
         }
-        if (start.isBefore((LocalDate.parse(queries.getPrviDatumLogger().toString().substring(0,10)))))
-        {
-            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Datum prvog loga je: "+queries.getPrviDatumLogger().toString().substring(0,10));
+        else{
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Trebaju biti unesena oba datuma ili ne treba unijeti ni jedan datum");
         }
-        if (end.isAfter((LocalDate.parse(queries.getZadnjiDatumLogger().toString().substring(0,10)))))
-        {
-            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Datum zadnjeg loga je: "+queries.getZadnjiDatumLogger().toString().substring(0,10));
-        }
-
-        return queries.getLogoviPoDatumu(start, end.plusDays(1));
     }
 }
+

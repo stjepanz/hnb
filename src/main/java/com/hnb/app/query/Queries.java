@@ -57,6 +57,9 @@ public interface Queries extends CrudRepository<Tecajevi, Long> {
 
 
 //    Logger
+    @Query(value = "select * from logovi where vrijeme between ?1 and ?2 and logged_user=?3", nativeQuery = true)
+    List<String> getLogoviPoDatumuIUseru(LocalDate datumOd, LocalDate datumDo, String username);
+
     @Query(value = "select * from logovi where vrijeme between ?1 and ?2", nativeQuery = true)
     List<String> getLogoviPoDatumu(LocalDate datumOd, LocalDate datumDo);
 
@@ -64,5 +67,4 @@ public interface Queries extends CrudRepository<Tecajevi, Long> {
     Timestamp getPrviDatumLogger();
     @Query(value = "select vrijeme from logovi order by vrijeme desc limit 1", nativeQuery = true)
     Timestamp getZadnjiDatumLogger();
-
 }
