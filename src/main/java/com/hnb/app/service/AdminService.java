@@ -131,7 +131,6 @@ public class AdminService {
         }
     }
 
-
     public void deleteUserById(String username,
                                String loggedUser,
                                HttpServletResponse response){
