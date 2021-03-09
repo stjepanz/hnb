@@ -50,7 +50,6 @@ public class AdminController {
                            @RequestBody Users user,
                            HttpServletResponse response,
                            HttpServletRequest request){
-//        String loggedUser="ABC";
         service.updateUserById(id, user, request.getUserPrincipal().getName(), response);
     }
 

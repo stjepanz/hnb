@@ -63,6 +63,12 @@ public class AdminService {
     public void createUser(Users user,
                            String loggedUser,
                            HttpServletResponse response) {
+        List<Users> userList = (List<Users>) repository.findAll();
+        for(int i=0; i<userList.size();i++){
+            if (userList.get(i).getUsername().equals(user.getUsername())){
+                throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Username vec postoji u bazi");
+            }
+        }
         if (user.getUsername()!=null && user.getPassword()!= null && user.getRoles()!=null){
             repository.save(user);
             logger.debug("Novi korisnik je dodan u bazu");
@@ -87,20 +93,25 @@ public class AdminService {
                                 Users user,
                                 String loggedUser,
                                 HttpServletResponse response) {
+        List<Users> userList = (List<Users>) repository.findAll();
+        for(int i=0; i<userList.size();i++){
+            if (userList.get(i).getUsername().equals(user.getUsername())){
+                throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Username vec postoji u bazi");
+            }
+        }
         try {
-            Optional<Users> odlUser = repository.findById(id);
-            Users newUser = new Users(user.getUsername(), user.getPassword(), user.getRoles());
-            if (user.getUsername()==null){
-                newUser.setUsername(odlUser.get().getUsername());
+            Optional<Users> optionalUser = repository.findById(id);
+            Users oldUser=optionalUser.get();
+            if (user.getUsername()!=null){
+                oldUser.setUsername(user.getUsername());
             }
-            if (user.getPassword()==null){
-                newUser.setPassword(odlUser.get().getPassword());
+            if (user.getPassword()!=null){
+                oldUser.setPassword(user.getPassword());
             }
-            if (user.getRoles()==null){
-                newUser.setRoles(odlUser.get().getRoles());
+            if (user.getRoles()!=null){
+                oldUser.setRoles(user.getRoles());
             }
-            newUser.setId(id);
-            repository.save(newUser);
+            repository.save(oldUser);
             logger.debug("Updateanje usera koji ima id: "+id);
             loggerService.spremiLog("Updateanje usera koji ima id: "+id, "/users/"+id, loggedUser, response.getStatus());
         }
