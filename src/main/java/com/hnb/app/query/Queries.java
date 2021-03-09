@@ -1,8 +1,11 @@
 package com.hnb.app.query;
 
 import com.hnb.app.models.Tecajevi;
+import com.hnb.app.models.UsersPosrednik;
+import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.CrudRepository;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.sql.Timestamp;
 import java.time.LocalDate;
@@ -67,4 +70,15 @@ public interface Queries extends CrudRepository<Tecajevi, Long> {
     Timestamp getPrviDatumLogger();
     @Query(value = "select vrijeme from logovi order by vrijeme desc limit 1", nativeQuery = true)
     Timestamp getZadnjiDatumLogger();
+
+
+//    Users
+
+    @Query(value = "select * from users where username = ?1", nativeQuery = true)
+    UsersPosrednik getUserByUsername(String username);
+
+    @Transactional
+    @Modifying(clearAutomatically = true)
+    @Query(value = "delete from users u where u.username = ?1", nativeQuery = true)
+    void deleteUserByUsername(String username);
 }

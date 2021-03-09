@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RestController;
 
+import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.net.HttpURLConnection;
@@ -30,29 +31,29 @@ public class HNBcontroller {
     HNBservice service;
 
     @GetMapping("/valute")
-    public List<String> getValute(@CurrentSecurityContext(expression="authentication?.name") String loggedUser,
-                                  HttpServletResponse response){
-        return service.getValute(loggedUser, response);
+    public List<String> getValute(HttpServletResponse response,
+                                  HttpServletRequest request){
+        return service.getValute(request.getUserPrincipal().getName(), response);
     }
 
     @GetMapping("/srednjitecaj/{valuta}/{start}/{end}")
-    public double getSrednjiTecaj(@CurrentSecurityContext(expression="authentication?.name") String loggedUser,
-                                  @PathVariable("valuta") String valuta,
+    public double getSrednjiTecaj(@PathVariable("valuta") String valuta,
                                   @PathVariable("start") String start,
                                   @PathVariable("end") String end,
-                                  HttpServletResponse response){
-        return service.prosjecnaSrednjaVrijednost(valuta, start, end, loggedUser, response);
+                                  HttpServletResponse response,
+                                  HttpServletRequest request){
+        return service.prosjecnaSrednjaVrijednost(valuta, start, end, request.getUserPrincipal().getName(), response);
     }
 
     @GetMapping("/praznine/provjera")
-    public String provjeraPraznina(@CurrentSecurityContext(expression="authentication?.name") String loggedUser,
-                                   HttpServletResponse response){
-        return service.provjeravanjePraznina(loggedUser, response);
+    public String provjeraPraznina(HttpServletResponse response,
+                                   HttpServletRequest request){
+        return service.provjeravanjePraznina(request.getUserPrincipal().getName(), response);
     }
 
     @GetMapping("/praznine/popunjavanje")
-    public void popunjavanjePraznina(@CurrentSecurityContext(expression="authentication?.name") String loggedUser,
-                                     HttpServletResponse response){
-        service.popunjavanjePraznina(loggedUser, response);
+    public void popunjavanjePraznina(HttpServletResponse response,
+                                     HttpServletRequest request){
+        service.popunjavanjePraznina(request.getUserPrincipal().getName(), response);
     }
 }

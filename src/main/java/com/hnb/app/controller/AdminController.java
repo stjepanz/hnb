@@ -2,6 +2,7 @@ package com.hnb.app.controller;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.hnb.app.models.Users;
+import com.hnb.app.models.UsersPosrednik;
 import com.hnb.app.service.AdminService;
 import com.hnb.app.service.LoggerService;
 import org.apache.catalina.connector.Request;
@@ -24,39 +25,39 @@ public class AdminController {
     AdminService service;
 
     @GetMapping("")
-    public List<Users> getAllUsers(HttpServletResponse response,
+    public List<UsersPosrednik> getAllUsers(HttpServletResponse response,
                                    HttpServletRequest request){
-        List<Users> list = service.getAllUsers(request.getUserPrincipal().getName(),response);
+        List<UsersPosrednik> list = service.getAllUsers(request.getUserPrincipal().getName(),response);
         return list;
     }
 
     @GetMapping("/{id}")
-    public Users getUserById(@PathVariable("id") int id,
+    public UsersPosrednik getUserById(@PathVariable("username") String username,
                              HttpServletResponse response,
                              HttpServletRequest request){
-        Users user= service.getUsersById(id, request.getUserPrincipal().getName(), response);
+        UsersPosrednik user= service.getUsersByUsername(username, request.getUserPrincipal().getName(), response);
         return user;
     }
 
     @PostMapping("")
-    public void createUser (@RequestBody Users user,
+    public void createUser (@RequestBody UsersPosrednik user,
                             HttpServletResponse response,
                             HttpServletRequest request){
         service.createUser(user,request.getUserPrincipal().getName(),response);
     }
 
-    @PutMapping("/{id}")
-    public void updateUser(@PathVariable("id") int id,
-                           @RequestBody Users user,
+    @PutMapping("/{username}")
+    public void updateUser(@PathVariable("username") String username,
+                           @RequestBody UsersPosrednik user,
                            HttpServletResponse response,
                            HttpServletRequest request){
-        service.updateUserById(id, user, request.getUserPrincipal().getName(), response);
+        service.updateUserById(username, user, request.getUserPrincipal().getName(), response);
     }
 
-    @DeleteMapping("/{id}")
-    public void deleteUserById(@PathVariable("id") int id,
+    @DeleteMapping("/{username}")
+    public void deleteUserById(@PathVariable("username") String username,
                                HttpServletResponse response,
                                HttpServletRequest request){
-        service.deleteUserById(id, request.getUserPrincipal().getName(), response);
+        service.deleteUserById(username, request.getUserPrincipal().getName(), response);
     }
 }

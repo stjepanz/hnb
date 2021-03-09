@@ -7,6 +7,7 @@ import org.springframework.security.core.annotation.CurrentSecurityContext;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.server.ResponseStatusException;
 
+import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.time.LocalDate;
 import java.util.List;
@@ -18,11 +19,11 @@ public class LoggerController {
     LoggerService loggerService;
 
     @GetMapping("/log")
-    public List<String> getLogoviUserDatumi(@CurrentSecurityContext(expression="authentication?.name") String loggedUser,
-                                            @RequestParam (required = false) String user,
+    public List<String> getLogoviUserDatumi(@RequestParam (required = false) String user,
                                             @RequestParam (required = false) String datumOd,
                                             @RequestParam (required = false) String datumDo,
-                                            HttpServletResponse response){
-        return loggerService.getLogovi(user, datumOd, datumDo, loggedUser, response);
+                                            HttpServletResponse response,
+                                            HttpServletRequest request){
+        return loggerService.getLogovi(user, datumOd, datumDo, request.getUserPrincipal().getName(), response);
     }
 }
