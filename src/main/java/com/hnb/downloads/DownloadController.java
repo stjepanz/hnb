@@ -22,6 +22,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
@@ -47,12 +48,12 @@ public class DownloadController {
     DownloadService service;
 
     @GetMapping(value = "/download/{valuta}/{start}/{end}")
-    public ResponseEntity<InputStreamResource> excelCustomersReport(@CurrentSecurityContext(expression="authentication?.name") String loggedUser,
-                                                                    @PathVariable("valuta") String valuta,
+    public ResponseEntity<InputStreamResource> excelCustomersReport(@PathVariable("valuta") String valuta,
                                                                     @PathVariable("start") String start,
                                                                     @PathVariable("end") String end,
-                                                                    HttpServletResponse response) throws IOException {
-        List<Tecajevi> tecajevi = service.listaZaExcel(valuta, start, end, loggedUser, response);
+                                                                    HttpServletResponse response,
+                                                                    HttpServletRequest request) throws IOException {
+        List<Tecajevi> tecajevi = service.listaZaExcel(valuta, start, end, request.getUserPrincipal().getName(), response);
         ByteArrayInputStream in = ExcelGenerator.tecajeviToExcel(tecajevi);
         // return IOUtils.toByteArray(in);
         HttpHeaders headers = new HttpHeaders();

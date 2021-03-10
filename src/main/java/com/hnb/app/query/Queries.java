@@ -1,11 +1,9 @@
 package com.hnb.app.query;
 
 import com.hnb.app.models.Tecajevi;
-import com.hnb.app.models.UsersPosrednik;
-import org.springframework.data.jpa.repository.Modifying;
+import com.hnb.app.models.Users;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.CrudRepository;
-import org.springframework.transaction.annotation.Transactional;
 
 import java.sql.Timestamp;
 import java.time.LocalDate;
@@ -74,11 +72,11 @@ public interface Queries extends CrudRepository<Tecajevi, Long> {
 
 //    Users
 
-    @Query(value = "select * from users where username = ?1", nativeQuery = true)
-    UsersPosrednik getUserByUsername(String username);
+    @Query(value = "select roles from users where username = ?1", nativeQuery = true)
+    String getRolesByUsername(String username);
 
-    @Transactional
-    @Modifying(clearAutomatically = true)
-    @Query(value = "delete from users u where u.username = ?1", nativeQuery = true)
+//    @Transactional
+//    @Modifying(clearAutomatically = true)
+    @Query(value = "delete from users where username = ?1", nativeQuery = true)
     void deleteUserByUsername(String username);
 }

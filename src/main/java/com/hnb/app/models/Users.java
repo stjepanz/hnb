@@ -67,4 +67,7 @@ public class Users {
                 ", roles='" + roles + '\'' +
                 '}';
     }
+
+    public void setId(int id) {
+    }
 }
