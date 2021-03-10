@@ -172,4 +172,5 @@ public class AdminService {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Korisnik kojeg zelite izbrisati ne postoji u bazi");
         }
     }
+    
 }
