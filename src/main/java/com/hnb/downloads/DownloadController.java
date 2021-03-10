@@ -47,11 +47,11 @@ public class DownloadController {
 
     @GetMapping(value = "/download")
     public ResponseEntity<InputStreamResource> excelCustomersReport(@RequestParam(required = false) String valuta,
-                                                                    @RequestParam(required = false) String start,
-                                                                    @RequestParam(required = false) String end,
+                                                                    @RequestParam(required = false) String datumOd,
+                                                                    @RequestParam(required = false) String datumDo,
                                                                     HttpServletResponse response,
                                                                     HttpServletRequest request) throws IOException {
-        List<Tecajevi> tecajevi = service.listaZaExcel(valuta, start, end, request.getUserPrincipal().getName(), response);
+        List<Tecajevi> tecajevi = service.listaZaExcel(valuta, datumOd, datumDo, request.getUserPrincipal().getName(), response);
         ByteArrayInputStream in = ExcelGenerator.tecajeviToExcel(tecajevi);
         // return IOUtils.toByteArray(in);
         HttpHeaders headers = new HttpHeaders();

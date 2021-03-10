@@ -61,6 +61,8 @@ public class DownloadService {
                 for (int i = 0; i < brojTecajnice.size(); i++) {
                     tecajeviOdDo.add(new Tecajevi(brojTecajnice.get(i), LocalDate.parse(datumPrimjene.get(i)), drzava.get(i), drzavaISO.get(i), sifraValute.get(i), valuta, Integer.parseInt(jedinica.get(i)), kupovniTecaj.get(i), srednjiTecaj.get(i), prodajniTecaj.get(i), Long.parseLong(id.get(i))));
                 }
+                logger.debug("Downloadanje excela - Danasnji dan, sve valute");
+                loggerService.spremiLog("Downloadanje excela - Danasnji dan, sve valute", "/download/", loggedUser, response.getStatus());
                 return tecajeviOdDo;
             } else {
                 List<Tecajevi> tecajeviOdDo = new ArrayList<>();
@@ -78,6 +80,8 @@ public class DownloadService {
                 for (int i = 0; i < brojTecajnice.size(); i++) {
                     tecajeviOdDo.add(new Tecajevi(brojTecajnice.get(i), LocalDate.parse(datumPrimjene.get(i)), drzava.get(i), drzavaISO.get(i), sifraValute.get(i), valuta, Integer.parseInt(jedinica.get(i)), kupovniTecaj.get(i), srednjiTecaj.get(i), prodajniTecaj.get(i), Long.parseLong(id.get(i))));
                 }
+                logger.debug("Downloadanje excela - Danasnji dan, valuta: "+ valuta);
+                loggerService.spremiLog("Downloadanje excela - Danasnji dan, valuta: "+ valuta, "/download/", loggedUser, response.getStatus());
                 return tecajeviOdDo;
             }
 
@@ -136,6 +140,8 @@ public class DownloadService {
                 for (int i = 0; i < brojTecajnice.size(); i++) {
                     tecajeviOdDo.add(new Tecajevi(brojTecajnice.get(i), LocalDate.parse(datumPrimjene.get(i)), drzava.get(i), drzavaISO.get(i), sifraValute.get(i), valuta, Integer.parseInt(jedinica.get(i)), kupovniTecaj.get(i), srednjiTecaj.get(i), prodajniTecaj.get(i), Long.parseLong(id.get(i))));
                 }
+                logger.debug("Downloadanje excela - Datum od: "+datumOd+" do: "+ datumDo+", sve valute");
+                loggerService.spremiLog("Downloadanje excela - Datum od: "+datumOd+" do: "+ datumDo+", sve valute", "/download/", loggedUser, response.getStatus());
                 return tecajeviOdDo;
             } else {
                 List<Tecajevi> tecajeviOdDo = new ArrayList<>();
@@ -153,59 +159,143 @@ public class DownloadService {
                 for (int i = 0; i < brojTecajnice.size(); i++) {
                     tecajeviOdDo.add(new Tecajevi(brojTecajnice.get(i), LocalDate.parse(datumPrimjene.get(i)), drzava.get(i), drzavaISO.get(i), sifraValute.get(i), valuta, Integer.parseInt(jedinica.get(i)), kupovniTecaj.get(i), srednjiTecaj.get(i), prodajniTecaj.get(i), Long.parseLong(id.get(i))));
                 }
+                logger.debug("Downloadanje excela - Datum od: "+datumOd+" do: "+ datumDo+", valuta: "+valuta);
+                loggerService.spremiLog("Downloadanje excela - Datum od: "+datumOd+" do: "+ datumDo+", valuta: "+valuta, "/download/", loggedUser, response.getStatus());
                 return tecajeviOdDo;
             }
 
-
-
-//            List<Tecajevi> tecajeviOdDo= new ArrayList<>();
-//
-//            List<String> brojTecajnice = queries.getBrojTecajniceRasponValuta(valuta, start, end);
-//            List<String> datumPrimjene = queries.getDatumPrimjeneRasponValuta(valuta, start, end);
-//            List<String> drzava = queries.getDrzavaRasponValuta(valuta, start, end);
-//            List<String> drzavaISO = queries.getDrzavaISORasponValuta(valuta, start, end);
-//            List<String> sifraValute = queries.getSifraValuteRasponValuta(valuta, start, end);
-//            List<String> jedinica = queries.getJedinicaRasponValuta(valuta, start, end);
-//            List<String> kupovniTecaj = queries.getKupovniTecajRasponValuta(valuta, start, end);
-//            List<String> srednjiTecaj = queries.getSrednjiTecajRasponValuta(valuta, start, end);
-//            List<String> prodajniTecaj = queries.getProdajniTecajRasponValuta(valuta, start, end);
-//            List<String> id = queries.getIdRasponValuta(valuta, start, end);
-//
-//            for (int i = 0; i < brojTecajnice.size(); i++) {
-//                tecajeviOdDo.add(new Tecajevi(brojTecajnice.get(i), LocalDate.parse(datumPrimjene.get(i)), drzava.get(i), drzavaISO.get(i), sifraValute.get(i), valuta, Integer.parseInt(jedinica.get(i)), kupovniTecaj.get(i), srednjiTecaj.get(i), prodajniTecaj.get(i), Long.parseLong(id.get(i))));
-//            }
-//            logger.debug("Downloadanje excell file-a za valutu " +valuta.toUpperCase()+" u periodu od "+start+ " do "+end);
-//            loggerService.spremiLog("Downloadanje excell file-a za valutu " +valuta.toUpperCase()+" u periodu od "+start+ " do "+end, "/download/"+valuta+"/"+start+"/"+end, loggedUser, response.getStatus());
-//            return tecajeviOdDo;
         }
         else {
-            return null;
+            if(datumOd!=null){
+                try{
+
+                    start=LocalDate.parse(datumOd);
+                }catch (Exception e){
+                    response.setStatus(400);
+                    logger.debug("Error - Downloadanje excela - Datum pocetka nije ispravan");
+                    loggerService.spremiLog("Error - Downloadanje - Datum pocetka nije ispravan", "/download/", loggedUser, response.getStatus());
+                    throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Datum pocetka nije ispravan", e);
+                }
+                if (start.isBefore(LocalDate.parse("1994-05-30")))
+                {
+                    response.setStatus(400);
+                    logger.debug("Error - Downloadanje excela - Prvi datum u bazi je 30.05.1994");
+                    loggerService.spremiLog("Error - Downloadanje excela - Prvi datum u bazi je 30.05.1994", "/download/", loggedUser, response.getStatus());
+                    throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Prvi datum u bazi je 30.05.1994");
+                }
+                if (start.isAfter(LocalDate.now()))
+                {
+                    response.setStatus(400);
+                    logger.debug("Error - Downloadanje excela - Datum jos nije dosao");
+                    loggerService.spremiLog("Error - Downloadanje excela - Datum jos nije dosao", "/download/", loggedUser, response.getStatus());
+                    throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Datum jos nije dosao");
+                }
+                if(valuta==null){
+                    List<Tecajevi> tecajeviOdDo = new ArrayList<>();
+                    List<String> brojTecajnice = queries.getBrojTecajniceRaspon(start, start);
+                    List<String> datumPrimjene = queries.getDatumPrimjeneRaspon(start, start);
+                    List<String> drzava = queries.getDrzavaRaspon(start, start);
+                    List<String> drzavaISO = queries.getDrzavaISORaspon(start, start);
+                    List<String> sifraValute = queries.getSifraValuteRaspon(start, start);
+                    List<String> jedinica = queries.getJedinicaRaspon(start, start);
+                    List<String> kupovniTecaj = queries.getKupovniTecajRaspon(start, start);
+                    List<String> srednjiTecaj = queries.getSrednjiTecajRaspon(start, start);
+                    List<String> prodajniTecaj = queries.getProdajniTecajRaspon(start, start);
+                    List<String> id = queries.getIdRaspon(start, start);
+
+                    for (int i = 0; i < brojTecajnice.size(); i++) {
+                        tecajeviOdDo.add(new Tecajevi(brojTecajnice.get(i), LocalDate.parse(datumPrimjene.get(i)), drzava.get(i), drzavaISO.get(i), sifraValute.get(i), valuta, Integer.parseInt(jedinica.get(i)), kupovniTecaj.get(i), srednjiTecaj.get(i), prodajniTecaj.get(i), Long.parseLong(id.get(i))));
+                    }
+                    logger.debug("Downloadanje excela - Datum: "+datumOd+", sve valute");
+                    loggerService.spremiLog("Downloadanje excela - Datum: "+datumOd+", sve valute", "/download/", loggedUser, response.getStatus());
+                    return tecajeviOdDo;
+                }
+                else{
+                    List<Tecajevi> tecajeviOdDo = new ArrayList<>();
+                    List<String> brojTecajnice = queries.getBrojTecajniceRasponValuta(valuta, start, start);
+                    List<String> datumPrimjene = queries.getDatumPrimjeneRasponValuta(valuta, start, start);
+                    List<String> drzava = queries.getDrzavaRasponValuta(valuta, start, start);
+                    List<String> drzavaISO = queries.getDrzavaISORasponValuta(valuta, start, start);
+                    List<String> sifraValute = queries.getSifraValuteRasponValuta(valuta, start, start);
+                    List<String> jedinica = queries.getJedinicaRasponValuta(valuta, start, start);
+                    List<String> kupovniTecaj = queries.getKupovniTecajRasponValuta(valuta, start, start);
+                    List<String> srednjiTecaj = queries.getSrednjiTecajRasponValuta(valuta, start, start);
+                    List<String> prodajniTecaj = queries.getProdajniTecajRasponValuta(valuta, start, start);
+                    List<String> id = queries.getIdRasponValuta(valuta, start, start);
+
+                    for (int i = 0; i < brojTecajnice.size(); i++) {
+                        tecajeviOdDo.add(new Tecajevi(brojTecajnice.get(i), LocalDate.parse(datumPrimjene.get(i)), drzava.get(i), drzavaISO.get(i), sifraValute.get(i), valuta, Integer.parseInt(jedinica.get(i)), kupovniTecaj.get(i), srednjiTecaj.get(i), prodajniTecaj.get(i), Long.parseLong(id.get(i))));
+                    }
+                    logger.debug("Downloadanje excela - Datum: "+datumOd+", valuta: "+valuta);
+                    loggerService.spremiLog("Downloadanje excela - Datum: "+datumOd+", valuta: "+valuta, "/download/", loggedUser, response.getStatus());
+                    return tecajeviOdDo;
+
+                }
+            }
+            else{
+                try{
+                    start=LocalDate.parse(datumDo);
+                }catch (Exception e){
+                    response.setStatus(400);
+                    logger.debug("Error - Downloadanje excela - Datum pocetka nije ispravan");
+                    loggerService.spremiLog("Error - Downloadanje - Datum pocetka nije ispravan", "/download/", loggedUser, response.getStatus());
+                    throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Datum pocetka nije ispravan", e);
+                }
+                if (start.isBefore(LocalDate.parse("1994-05-30")))
+                {
+                    response.setStatus(400);
+                    logger.debug("Error - Downloadanje excela - Prvi datum u bazi je 30.05.1994");
+                    loggerService.spremiLog("Error - Downloadanje excela - Prvi datum u bazi je 30.05.1994", "/download/", loggedUser, response.getStatus());
+                    throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Prvi datum u bazi je 30.05.1994");
+                }
+                if (start.isAfter(LocalDate.now()))
+                {
+                    response.setStatus(400);
+                    logger.debug("Error - Downloadanje excela - Datum jos nije dosao");
+                    loggerService.spremiLog("Error - Downloadanje excela - Datum jos nije dosao", "/download/", loggedUser, response.getStatus());
+                    throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Datum jos nije dosao");
+                }
+                if(valuta==null){
+                    List<Tecajevi> tecajeviOdDo = new ArrayList<>();
+                    List<String> brojTecajnice = queries.getBrojTecajniceRaspon(start, start);
+                    List<String> datumPrimjene = queries.getDatumPrimjeneRaspon(start, start);
+                    List<String> drzava = queries.getDrzavaRaspon(start, start);
+                    List<String> drzavaISO = queries.getDrzavaISORaspon(start, start);
+                    List<String> sifraValute = queries.getSifraValuteRaspon(start, start);
+                    List<String> jedinica = queries.getJedinicaRaspon(start, start);
+                    List<String> kupovniTecaj = queries.getKupovniTecajRaspon(start, start);
+                    List<String> srednjiTecaj = queries.getSrednjiTecajRaspon(start, start);
+                    List<String> prodajniTecaj = queries.getProdajniTecajRaspon(start, start);
+                    List<String> id = queries.getIdRaspon(start, start);
+
+                    for (int i = 0; i < brojTecajnice.size(); i++) {
+                        tecajeviOdDo.add(new Tecajevi(brojTecajnice.get(i), LocalDate.parse(datumPrimjene.get(i)), drzava.get(i), drzavaISO.get(i), sifraValute.get(i), valuta, Integer.parseInt(jedinica.get(i)), kupovniTecaj.get(i), srednjiTecaj.get(i), prodajniTecaj.get(i), Long.parseLong(id.get(i))));
+                    }
+                    logger.debug("Downloadanje excela - Datum: "+datumDo+", sve valute");
+                    loggerService.spremiLog("Downloadanje excela - Datum: "+datumDo+", valuta: "+valuta, "/download/", loggedUser, response.getStatus());
+                    return tecajeviOdDo;
+                }
+                else{
+                    List<Tecajevi> tecajeviOdDo = new ArrayList<>();
+                    List<String> brojTecajnice = queries.getBrojTecajniceRasponValuta(valuta, start, start);
+                    List<String> datumPrimjene = queries.getDatumPrimjeneRasponValuta(valuta, start, start);
+                    List<String> drzava = queries.getDrzavaRasponValuta(valuta, start, start);
+                    List<String> drzavaISO = queries.getDrzavaISORasponValuta(valuta, start, start);
+                    List<String> sifraValute = queries.getSifraValuteRasponValuta(valuta, start, start);
+                    List<String> jedinica = queries.getJedinicaRasponValuta(valuta, start, start);
+                    List<String> kupovniTecaj = queries.getKupovniTecajRasponValuta(valuta, start, start);
+                    List<String> srednjiTecaj = queries.getSrednjiTecajRasponValuta(valuta, start, start);
+                    List<String> prodajniTecaj = queries.getProdajniTecajRasponValuta(valuta, start, start);
+                    List<String> id = queries.getIdRasponValuta(valuta, start, start);
+
+                    for (int i = 0; i < brojTecajnice.size(); i++) {
+                        tecajeviOdDo.add(new Tecajevi(brojTecajnice.get(i), LocalDate.parse(datumPrimjene.get(i)), drzava.get(i), drzavaISO.get(i), sifraValute.get(i), valuta, Integer.parseInt(jedinica.get(i)), kupovniTecaj.get(i), srednjiTecaj.get(i), prodajniTecaj.get(i), Long.parseLong(id.get(i))));
+                    }
+                    logger.debug("Downloadanje excela - Datum: "+datumDo+", valuta: "+valuta);
+                    loggerService.spremiLog("Downloadanje excela - Datum: "+datumDo+", valuta: "+valuta, "/download/", loggedUser, response.getStatus());
+                    return tecajeviOdDo;
+                }
+            }
         }
-
     }
-
-
-
-
-
-
-
-
-
-
-
-
-
-//        if (svevalute.contains(valuta)){
-//
-
-//        }
-//        else{
-//            response.setStatus(400);
-//            logger.debug("Error - Racunanje srednjeg tecaja za valutu "+valuta.toUpperCase()+" u periodu od "+datumOd+ " do "+datumDo+"- Valuta "+valuta+" ne postoji");
-//            loggerService.spremiLog("Error - Racunanje srednjeg tecaja za valutu "+valuta.toUpperCase()+" u periodu od "+datumOd+ " do "+datumDo+"- Valuta "+valuta+" ne postoji", "/download/"+valuta+"/"+datumOd+"/"+datumDo, loggedUser, response.getStatus());
-//            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Valuta "+valuta+" ne postoji");
-//        }
-//
-//    }
 }
