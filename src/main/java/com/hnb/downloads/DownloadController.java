@@ -44,7 +44,6 @@ public class DownloadController {
     @Autowired
     DownloadService service;
 
-
     @GetMapping(value = "/download")
     public ResponseEntity<InputStreamResource> excelCustomersReport(@RequestParam(required = false) String valuta,
                                                                     @RequestParam(required = false) String datumOd,

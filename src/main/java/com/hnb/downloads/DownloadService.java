@@ -18,7 +18,6 @@ import java.util.List;
 @Service
 public class DownloadService {
 
-
     private final Logger logger = LoggerFactory.getLogger(this.getClass());
 
     @Autowired
@@ -42,8 +41,6 @@ public class DownloadService {
                 throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Valuta ne postoji u bazi");
             }
         }
-
-
         if (datumOd == null && datumDo == null) {
             if (valuta == null) {
                 List<Tecajevi> tecajeviOdDo = new ArrayList<>();
@@ -163,12 +160,10 @@ public class DownloadService {
                 loggerService.spremiLog("Downloadanje excela - Datum od: "+datumOd+" do: "+ datumDo+", valuta: "+valuta, "/download/", loggedUser, response.getStatus());
                 return tecajeviOdDo;
             }
-
         }
         else {
             if(datumOd!=null){
                 try{
-
                     start=LocalDate.parse(datumOd);
                 }catch (Exception e){
                     response.setStatus(400);
@@ -229,7 +224,6 @@ public class DownloadService {
                     logger.debug("Downloadanje excela - Datum: "+datumOd+", valuta: "+valuta);
                     loggerService.spremiLog("Downloadanje excela - Datum: "+datumOd+", valuta: "+valuta, "/download/", loggedUser, response.getStatus());
                     return tecajeviOdDo;
-
                 }
             }
             else{

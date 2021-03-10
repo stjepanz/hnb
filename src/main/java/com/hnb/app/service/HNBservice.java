@@ -131,7 +131,6 @@ public class HNBservice {
         return "Broj dana koji nedostaju: " + brojac;
     }
 
-
     public double prosjecnaSrednjaVrijednost(String valuta,
                                              String datumOd,
                                              String datumDo,
