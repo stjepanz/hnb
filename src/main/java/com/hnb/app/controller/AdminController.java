@@ -37,7 +37,6 @@ public class AdminController {
         return service.getUsersByUsername(username, request.getUserPrincipal().getName(), response);
     }
 
-
     @PostMapping("")
     public void createUser (@RequestBody Users user,
                             HttpServletResponse response,
@@ -45,18 +44,18 @@ public class AdminController {
         service.createUser(user,request.getUserPrincipal().getName(),response);
     }
 
-    @PutMapping("/{id}")
-    public void updateUser(@PathVariable("id") int id,
-                           @RequestBody Users user,
-                           HttpServletResponse response,
-                           HttpServletRequest request){
-        service.updateUserById(id, user, request.getUserPrincipal().getName(), response);
+    @PutMapping("/{username}")
+    public void updatePrekoUsernamea(@PathVariable("username") String username,
+                                     @RequestBody Users user,
+                                     HttpServletResponse response,
+                                     HttpServletRequest request){
+        service.updateUserByUsername(username, user, request.getUserPrincipal().getName(), response);
     }
 
-    @DeleteMapping("/{id}")
-    public void deleteUserById(@PathVariable("id") int id,
-                               HttpServletResponse response,
-                               HttpServletRequest request){
-        service.deleteUserById(id, request.getUserPrincipal().getName(), response);
+    @DeleteMapping("/{username}")
+    public void deleteUserUsername(@PathVariable("username") String username,
+                                   HttpServletResponse response,
+                                   HttpServletRequest request){
+        service.deleteUserUsername(username, request.getUserPrincipal().getName(), response);
     }
 }

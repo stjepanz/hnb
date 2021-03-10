@@ -59,19 +59,18 @@ public class AdminService {
             for (int i=0; i<userList.size(); i++){
                 if (userList.get(i).getUsername().equals(username)){
                     logger.debug("Dohvacanje usera koji ima username: "+username);
-                    loggerService.spremiLog("Dohvacanje usera koji ima username: "+username, "/users/proba/"+username, loggedUser, response.getStatus());
+                    loggerService.spremiLog("Dohvacanje usera koji ima username: "+username, "/users"+username, loggedUser, response.getStatus());
                     return new UsersGet(username, queries.getRolesByUsername(username));
-
                 }
             }response.setStatus(400);
             logger.debug("Error - Dohvacanje usera koji ima username: "+username);
-            loggerService.spremiLog("Error - Dohvacanje usera koji ima username: "+username, "/users/proba/"+username+" - User koji ima username: "+ username + " ne postoji u bazi", loggedUser, response.getStatus());
+            loggerService.spremiLog("Error - Dohvacanje usera koji ima username: "+username, "/users"+username+" - User koji ima username: "+ username + " ne postoji u bazi", loggedUser, response.getStatus());
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "User koji ima username: "+ username + " ne postoji u bazi");
         }
         catch (Exception e){
             response.setStatus(400);
             logger.debug("Error - Dohvacanje usera koji ima username: "+username);
-            loggerService.spremiLog("Error - Dohvacanje usera koji ima username: "+username, "/users/proba/"+username+" - User koji ima username: "+ username + " ne postoji u bazi", loggedUser, response.getStatus());
+            loggerService.spremiLog("Error - Dohvacanje usera koji ima username: "+username, "/users"+username+" - User koji ima username: "+ username + " ne postoji u bazi", loggedUser, response.getStatus());
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "User koji ima username: "+ username + " ne postoji u bazi", e);
         }
     }
@@ -79,7 +78,6 @@ public class AdminService {
     public void createUser(Users user,
                            String loggedUser,
                            HttpServletResponse response) {
-
         List<Users> userList = (List<Users>) repository.findAll();
         for (int i =0; i<userList.size(); i++){
             if (userList.get(i).getUsername().equals(user.getUsername())){
@@ -106,55 +104,72 @@ public class AdminService {
             loggerService.spremiLog("Error - Unos novog korisnika u bazu - Unesite sve podatke potrebne za kreiranje usera", "/users/", loggedUser, response.getStatus());
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Unesite sve podatke potrebne za kreiranje usera");
         }
-
     }
 
-    public void updateUserById (int id,
-                                Users user,
-                                String loggedUser,
-                                HttpServletResponse response) {
-        try {
-            Optional<Users> odlUser = repository.findById(id);
-            Users newUser = new Users(user.getUsername(), user.getPassword(), user.getRoles());
-            if (user.getUsername()==null){
-                newUser.setUsername(odlUser.get().getUsername());
+    public void updateUserByUsername (String username,
+                                      Users user,
+                                      String loggedUser,
+                                      HttpServletResponse response) {
+        int flag = 0;
+        List<Users> userList = (List<Users>) repository.findAll();
+        for (int i = 0; i < userList.size(); i++) {
+            if (userList.get(i).getUsername().equals(user.getUsername())) {
+                response.setStatus(400);
+                logger.debug("Error - Unos novog korisnika u bazu - Korisnik vec postoji u bazi");
+                loggerService.spremiLog("Error - Unos novog korisnika u bazu - Korisnik " + user.getUsername() + " vec postoji u bazi", "/users/", loggedUser, response.getStatus());
+                throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Korisnik " + user.getUsername() + " vec postoji u bazi");
             }
-            if (user.getPassword()==null){
-                newUser.setPassword(odlUser.get().getPassword());
-            }
-            if (user.getRoles()==null){
-                newUser.setRoles(odlUser.get().getRoles());
-            }
-            newUser.setId(id);
-            repository.save(newUser);
-            logger.debug("Updateanje usera koji ima id: "+id);
-            loggerService.spremiLog("Updateanje usera koji ima id: "+id, "/users/"+id, loggedUser, response.getStatus());
         }
-        catch (Exception e){
+//        try {
+        for (int i = 0; i < userList.size(); i++) {
+            if (userList.get(i).getUsername().equals(username)) {
+                flag=1;
+                Users oldUser = repository.findById(userList.get(i).getId()).get();
+                if (user.getUsername()!=null){
+                    oldUser.setUsername(user.getUsername());
+                }
+                if (user.getPassword()!=null){
+                    oldUser.setPassword(user.getPassword());
+                }
+                if (user.getRoles()!=null){
+                    oldUser.setRoles(user.getRoles());
+                }
+                repository.save(oldUser);
+                logger.debug("Updateanje usera koji ima username: " + username);
+                loggerService.spremiLog("Updateanje usera koji ima username: " + username, "/users/" + username, loggedUser, response.getStatus());
+            }
+        }
+//        } catch (Exception e) {
+        if(flag==0) {
             response.setStatus(400);
-            logger.debug("Error - Updateanje usera koji ima id: "+id +" - User koji ima id: "+ id + "ne postoji u bazi");
-            loggerService.spremiLog("Error - Updateanje usera koji ima id: "+id +" - User koji ima id: "+ id + "ne postoji u bazi", "/users/"+id, loggedUser, response.getStatus());
-            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "User koji ima id: "+ id + "ne postoji u bazi", e);
-
+            logger.debug("Error - Updateanje korisnika u baz1 - Korisnik kojeg zelite updateati ne postoji u bazi");
+            loggerService.spremiLog("Error - Updateanje korisnika u baz1 - Korisnik kojeg zelite updateati ne postoji u bazi", "/users/", loggedUser, response.getStatus());
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Korisnik kojeg zelite updateati ne postoji u bazi");
         }
     }
+//    }
 
+    public void deleteUserUsername(String username,
+                                   String loggedUser,
+                                   HttpServletResponse response){
+        int flag = 0;
+        List<Users> userList = (List<Users>) repository.findAll();
 
-    public void deleteUserById(int id,
-                               String loggedUser,
-                               HttpServletResponse response){
-        try {
-            Optional<Users> user = repository.findById(id);
-            repository.deleteById(id);
-            logger.debug("Brisanje usera koji ima id: "+id);
-            loggerService.spremiLog("Brisanje usera koji ima id: "+id, "/users/"+id, loggedUser, response.getStatus());
+//        try {
+        for (int i = 0; i < userList.size(); i++) {
+            if (userList.get(i).getUsername().equals(username)) {
+                flag=1;
+                repository.deleteById(userList.get(i).getId());
+                logger.debug("Brisanje usera koji ima username: " + username);
+                loggerService.spremiLog("Brisanje usera koji ima username: " + username, "/users/" + username, loggedUser, response.getStatus());
+            }
         }
-        catch (Exception e){
+//        } catch (Exception e) {
+        if(flag==0) {
             response.setStatus(400);
-            logger.debug("Error - Brisanje usera koji ima id: "+id);
-            loggerService.spremiLog("Error - Brisanje usera koji ima id: "+id, "/users/"+id+" - User koji ima id: "+ id + "ne postoji u bazi", loggedUser, response.getStatus());
-            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "User koji ima id: "+ id + "ne postoji u bazi", e);
-
+            logger.debug("Error - Brisanje korisnika u bazi - Korisnik kojeg zelite izbrisati ne postoji u bazi");
+            loggerService.spremiLog("Error - Brisanje korisnika u bazi - Korisnik kojeg zelite izbrisati ne postoji u bazi", "/users/", loggedUser, response.getStatus());
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Korisnik kojeg zelite izbrisati ne postoji u bazi");
         }
     }
 }
