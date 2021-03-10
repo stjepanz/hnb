@@ -17,10 +17,7 @@ import org.springframework.core.io.InputStreamResource;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.CurrentSecurityContext;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -47,10 +44,11 @@ public class DownloadController {
     @Autowired
     DownloadService service;
 
-    @GetMapping(value = "/download/{valuta}/{start}/{end}")
-    public ResponseEntity<InputStreamResource> excelCustomersReport(@PathVariable("valuta") String valuta,
-                                                                    @PathVariable("start") String start,
-                                                                    @PathVariable("end") String end,
+
+    @GetMapping(value = "/download")
+    public ResponseEntity<InputStreamResource> excelCustomersReport(@RequestParam(required = false) String valuta,
+                                                                    @RequestParam(required = false) String start,
+                                                                    @RequestParam(required = false) String end,
                                                                     HttpServletResponse response,
                                                                     HttpServletRequest request) throws IOException {
         List<Tecajevi> tecajevi = service.listaZaExcel(valuta, start, end, request.getUserPrincipal().getName(), response);

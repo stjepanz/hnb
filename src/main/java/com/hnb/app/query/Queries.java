@@ -25,39 +25,70 @@ public interface Queries extends CrudRepository<Tecajevi, Long> {
     LocalDate provjeriDatum(LocalDate datum);
 
 
-//    Excel
+    //    Excel - sa valutom
     @Query(value = "select broj_tecajnice from tecajevi where valuta = ?1 and datum_primjene between ?2 and ?3 order by datum_primjene asc", nativeQuery = true)
-    List<String> getBrojTecajniceRaspon(String valuta, LocalDate datumOd, LocalDate datumDo);
+    List<String> getBrojTecajniceRasponValuta(String valuta, LocalDate datumOd, LocalDate datumDo);
 
     @Query(value = "select datum_primjene from tecajevi where valuta = ?1 and datum_primjene between ?2 and ?3 order by datum_primjene asc", nativeQuery = true)
-    List<String> getDatumPrimjeneRaspon(String valuta, LocalDate datumOd, LocalDate datumDo);
+    List<String> getDatumPrimjeneRasponValuta(String valuta, LocalDate datumOd, LocalDate datumDo);
 
     @Query(value = "select drzava from tecajevi where valuta = ?1 and datum_primjene between ?2 and ?3 order by datum_primjene asc", nativeQuery = true)
-    List<String> getDrzavaRaspon(String valuta, LocalDate datumOd, LocalDate datumDo);
+    List<String> getDrzavaRasponValuta(String valuta, LocalDate datumOd, LocalDate datumDo);
 
     @Query(value = "select drzava_iso from tecajevi where valuta = ?1 and datum_primjene between ?2 and ?3 order by datum_primjene asc", nativeQuery = true)
-    List<String> getDrzavaISORaspon(String valuta, LocalDate datumOd, LocalDate datumDo);
+    List<String> getDrzavaISORasponValuta(String valuta, LocalDate datumOd, LocalDate datumDo);
 
     @Query(value = "select sifra_valute from tecajevi where valuta = ?1 and datum_primjene between ?2 and ?3 order by datum_primjene asc", nativeQuery = true)
-    List<String> getSifraValuteRaspon(String valuta, LocalDate datumOd, LocalDate datumDo);
+    List<String> getSifraValuteRasponValuta(String valuta, LocalDate datumOd, LocalDate datumDo);
 
     @Query(value = "select jedinica from tecajevi where valuta = ?1 and datum_primjene between ?2 and ?3 order by datum_primjene asc", nativeQuery = true)
-    List<String> getJedinicaRaspon(String valuta, LocalDate datumOd, LocalDate datumDo);
+    List<String> getJedinicaRasponValuta(String valuta, LocalDate datumOd, LocalDate datumDo);
 
     @Query(value = "select kupovni_tecaj from tecajevi where valuta = ?1 and datum_primjene between ?2 and ?3 order by datum_primjene asc", nativeQuery = true)
-    List<String> getKupovniTecajRaspon(String valuta, LocalDate datumOd, LocalDate datumDo);
+    List<String> getKupovniTecajRasponValuta(String valuta, LocalDate datumOd, LocalDate datumDo);
 
     @Query(value = "select srednji_tecaj from tecajevi where valuta = ?1 and datum_primjene between ?2 and ?3 order by datum_primjene asc", nativeQuery = true)
-    List<String> getSrednjiTecajRaspon(String valuta, LocalDate datumOd, LocalDate datumDo);
+    List<String> getSrednjiTecajRasponValuta(String valuta, LocalDate datumOd, LocalDate datumDo);
 
     @Query(value = "select prodajni_tecaj from tecajevi where valuta = ?1 and datum_primjene between ?2 and ?3 order by datum_primjene asc", nativeQuery = true)
-    List<String> getProdajniTecajRaspon(String valuta, LocalDate datumOd, LocalDate datumDo);
+    List<String> getProdajniTecajRasponValuta(String valuta, LocalDate datumOd, LocalDate datumDo);
 
     @Query(value = "select id from tecajevi where valuta = ?1 and datum_primjene between ?2 and ?3 order by datum_primjene asc", nativeQuery = true)
-    List<String> getIdRaspon(String valuta, LocalDate datumOd, LocalDate datumDo);
+    List<String> getIdRasponValuta(String valuta, LocalDate datumOd, LocalDate datumDo);
+
+//    Excel - bez valute
+    @Query(value = "select broj_tecajnice from tecajevi where datum_primjene between ?1 and ?2 order by datum_primjene asc", nativeQuery = true)
+    List<String> getBrojTecajniceRaspon(LocalDate datumOd, LocalDate datumDo);
+
+    @Query(value = "select datum_primjene from tecajevi where datum_primjene between ?1 and ?2 order by datum_primjene asc", nativeQuery = true)
+    List<String> getDatumPrimjeneRaspon(LocalDate datumOd, LocalDate datumDo);
+
+    @Query(value = "select drzava from tecajevi where datum_primjene between ?1 and ?2 order by datum_primjene asc", nativeQuery = true)
+    List<String> getDrzavaRaspon(LocalDate datumOd, LocalDate datumDo);
+
+    @Query(value = "select drzava_iso from tecajevi where datum_primjene between ?1 and ?2 order by datum_primjene asc", nativeQuery = true)
+    List<String> getDrzavaISORaspon(LocalDate datumOd, LocalDate datumDo);
+
+    @Query(value = "select sifra_valute from tecajevi where datum_primjene between ?1 and ?2 order by datum_primjene asc", nativeQuery = true)
+    List<String> getSifraValuteRaspon(LocalDate datumOd, LocalDate datumDo);
+
+    @Query(value = "select jedinica from tecajevi where datum_primjene between ?1 and ?2 order by datum_primjene asc", nativeQuery = true)
+    List<String> getJedinicaRaspon(LocalDate datumOd, LocalDate datumDo);
+
+    @Query(value = "select kupovni_tecaj from tecajevi where datum_primjene between ?1 and ?2 order by datum_primjene asc", nativeQuery = true)
+    List<String> getKupovniTecajRaspon(LocalDate datumOd, LocalDate datumDo);
+
+    @Query(value = "select srednji_tecaj from tecajevi where datum_primjene between ?1 and ?2 order by datum_primjene asc", nativeQuery = true)
+    List<String> getSrednjiTecajRaspon(LocalDate datumOd, LocalDate datumDo);
+
+    @Query(value = "select prodajni_tecaj from tecajevi where datum_primjene between ?1 and ?2 order by datum_primjene asc", nativeQuery = true)
+    List<String> getProdajniTecajRaspon(LocalDate datumOd, LocalDate datumDo);
+
+    @Query(value = "select id from tecajevi where datum_primjene between ?1 and ?2 order by datum_primjene asc", nativeQuery = true)
+    List<String> getIdRaspon(LocalDate datumOd, LocalDate datumDo);
 
 
-//    Logger
+    //    Logger
     @Query(value = "select * from logovi where vrijeme between ?1 and ?2 and logged_user=?3", nativeQuery = true)
     List<String> getLogoviPoDatumuIUseru(LocalDate datumOd, LocalDate datumDo, String username);
 
