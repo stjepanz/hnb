@@ -3,6 +3,7 @@ package com.hnb.app.controller;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.hnb.app.models.Users;
 import com.hnb.app.models.UsersGet;
+import com.hnb.app.models.UsersPostPut;
 import com.hnb.app.service.AdminService;
 import com.hnb.app.service.LoggerService;
 import org.apache.catalina.connector.Request;
@@ -38,7 +39,7 @@ public class AdminController {
     }
 
     @PostMapping("")
-    public void createUser (@RequestBody Users user,
+    public void createUser (@RequestBody UsersPostPut user,
                             HttpServletResponse response,
                             HttpServletRequest request){
         service.createUser(user,request.getUserPrincipal().getName(),response);
@@ -46,7 +47,7 @@ public class AdminController {
 
     @PutMapping("/{username}")
     public void updatePrekoUsernamea(@PathVariable("username") String username,
-                                     @RequestBody Users user,
+                                     @RequestBody UsersPostPut user,
                                      HttpServletResponse response,
                                      HttpServletRequest request){
         service.updateUserByUsername(username, user, request.getUserPrincipal().getName(), response);

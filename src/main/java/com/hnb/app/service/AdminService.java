@@ -2,6 +2,7 @@ package com.hnb.app.service;
 
 import com.hnb.app.models.Users;
 import com.hnb.app.models.UsersGet;
+import com.hnb.app.models.UsersPostPut;
 import com.hnb.app.query.Queries;
 import com.hnb.app.repository.AdminRepository;
 import org.slf4j.Logger;
@@ -75,7 +76,7 @@ public class AdminService {
         }
     }
 
-    public void createUser(Users user,
+    public void createUser(UsersPostPut user,
                            String loggedUser,
                            HttpServletResponse response) {
         List<Users> userList = (List<Users>) repository.findAll();
@@ -88,7 +89,7 @@ public class AdminService {
             }
         }
         if (user.getUsername()!=null && user.getPassword()!= null && user.getRoles()!=null){
-            repository.save(user);
+            repository.save(new Users(user.getUsername(), user.getPassword(), user.getRoles()));
             logger.debug("Novi korisnik je dodan u bazu");
             loggerService.spremiLog("Unos novog korisnika u bazu", "/users/", loggedUser, response.getStatus());
         }
@@ -107,7 +108,7 @@ public class AdminService {
     }
 
     public void updateUserByUsername (String username,
-                                      Users user,
+                                      UsersPostPut user,
                                       String loggedUser,
                                       HttpServletResponse response) {
         int flag = 0;
@@ -172,5 +173,5 @@ public class AdminService {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Korisnik kojeg zelite izbrisati ne postoji u bazi");
         }
     }
-    
+
 }
