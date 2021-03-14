@@ -41,6 +41,9 @@ public interface Queries extends CrudRepository<Tecajevi, Long> {
     @Query(value = "select sifra_valute from tecajevi where valuta = ?1 and datum_primjene between ?2 and ?3 order by datum_primjene asc", nativeQuery = true)
     List<String> getSifraValuteRasponValuta(String valuta, LocalDate datumOd, LocalDate datumDo);
 
+    @Query(value = "select valuta from tecajevi where valuta = ?1 and datum_primjene between ?2 and ?3 order by datum_primjene asc", nativeQuery = true)
+    List<String> getValuteRasponValuta(String valuta, LocalDate datumOd, LocalDate datumDo);
+
     @Query(value = "select jedinica from tecajevi where valuta = ?1 and datum_primjene between ?2 and ?3 order by datum_primjene asc", nativeQuery = true)
     List<String> getJedinicaRasponValuta(String valuta, LocalDate datumOd, LocalDate datumDo);
 
@@ -71,6 +74,9 @@ public interface Queries extends CrudRepository<Tecajevi, Long> {
 
     @Query(value = "select sifra_valute from tecajevi where datum_primjene between ?1 and ?2 order by datum_primjene asc", nativeQuery = true)
     List<String> getSifraValuteRaspon(LocalDate datumOd, LocalDate datumDo);
+
+    @Query(value = "select valuta from tecajevi where datum_primjene between ?1 and ?2 order by datum_primjene asc", nativeQuery = true)
+    List<String> getValuteRaspon(LocalDate datumOd, LocalDate datumDo);
 
     @Query(value = "select jedinica from tecajevi where datum_primjene between ?1 and ?2 order by datum_primjene asc", nativeQuery = true)
     List<String> getJedinicaRaspon(LocalDate datumOd, LocalDate datumDo);

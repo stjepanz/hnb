@@ -1,6 +1,7 @@
 package com.hnb.downloads;
 
 import com.hnb.app.models.Tecajevi;
+import com.hnb.app.models.TecajeviUpload;
 import org.apache.poi.ss.usermodel.*;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 import org.springframework.stereotype.Service;
@@ -8,6 +9,11 @@ import org.springframework.stereotype.Service;
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
+import java.io.InputStream;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
 
 @Service
@@ -30,6 +36,8 @@ public class ExcelGenerator {
             headerFont.setColor(IndexedColors.BLUE.getIndex());
 
             CellStyle headerCellStyle = workbook.createCellStyle();
+
+            headerCellStyle.setFont(headerFont);
 
             // Row for header
             Row headerRow = sheet.createRow(0);
@@ -66,4 +74,5 @@ public class ExcelGenerator {
             return new ByteArrayInputStream(out.toByteArray());
         }
     }
+
 }
