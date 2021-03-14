@@ -25,7 +25,6 @@ public class UploadService {
     @Autowired
     UploadRepository uploadRepository;
 
-
     private final UploadUtil uploadUtil;
 
     public UploadService(UploadUtil uploadUtil){
