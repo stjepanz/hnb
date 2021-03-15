@@ -26,9 +26,6 @@ public class UploadService {
     @Autowired
     LoggerService loggerService;
 
-//    @Autowired
-//    UploadFlag uploadFlag;
-
     @Autowired
     UploadRepository uploadRepository;
 
